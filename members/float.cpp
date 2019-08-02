@@ -3,10 +3,10 @@ extern Task fastturn_task;
 extern Task slowturn_task;
 extern Task rest_task;
 
-#define FASTTRUN 500
-#define SLOWTURN 87
-#define STOP 0
-#define REST_TIME 20
+// #define FASTTRUN 500
+// #define SLOWTURN 87
+// #define STOP 0
+// #define REST_TIME 20
 
 // room protocol
 static int message = 0;
@@ -81,7 +81,10 @@ void routine() {
 Task routine_task(0, TASK_ONCE, &routine);
 
 void fastturn() {
-  analogWrite(D6,600);
+  int r = random(400, 800);
+  analogWrite(D6,r);
+  Serial.print("fast:");
+  Serial.println(r);
   slowturn_task.restartDelayed(20000);
 
 }
@@ -89,18 +92,25 @@ Task fastturn_task(0, TASK_ONCE, &fastturn);
 
 // handle down
 void slowturn() {
-  analogWrite(D6,200);
-  rest_task.restartDelayed(5000);
+  int r = random(200, 400);
+  Serial.print("slow:");
+  Serial.println(r);
+  analogWrite(D6,r);
+  rest_task.restartDelayed(15000);
 }
 Task slowturn_task(0, TASK_ONCE, &slowturn);
 
 void rest() {
   analogWrite(D6,0);
+  // fastturn_task.restartDelayed(100);
 }
 Task rest_task(0, TASK_ONCE, &rest);
 
 
 void setup_member() {
+  //random seed
+  randomSeed(analogRead(0));
+
   //i2c master
   pinMode(D6, OUTPUT);
 
@@ -114,5 +124,6 @@ void setup_member() {
   runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  rest_task.restartDelayed(500);
+  //rest_task.restartDelayed(500);
+  fastturn_task.restartDelayed(100);
 }
