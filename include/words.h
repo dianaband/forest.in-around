@@ -35,25 +35,6 @@
 //announcements
 #define CONDUCTOR_WORD_HELLO         (ID_CONDUCTOR + 0x00)
 
-#define DISTANCE_WORD_HELLO          (ID_DISTANCE + 0x00)
-#define DISTANCE_WORD_PRINCE_ACTIVE  (ID_DISTANCE + 0x01)
-
-#define GPS_WORD_HELLO                    (ID_GPS + 0x00)
-#define GPS_WORD_PLANETARY_ANNOUNCEMENT   (ID_GPS + 0x01)
-
-#define DOOR_WORD_HELLO              (ID_DOOR + 0x00)
-#define DOOR_WORD_PASSING_BY         (ID_DOOR + 0x01)
-#define DOOR_WORD_NO_PASSENGER       (ID_DOOR + 0x02)
-
-#define MOTION_WORD_HELLO            (ID_MOTION_SENSOR + 0x00)
-#define MOTION_WORD_MOTION_START     (ID_MOTION_SENSOR + 0x01)
-#define MOTION_WORD_MOTION_END       (ID_MOTION_SENSOR + 0x02)
-
-#define TUNER_WORD_HELLO             (ID_TUNER + 0x00)
-#define TUNER_WORD_THIS_IS_CORRECT   (ID_TUNER + 0x01)
-#define TUNER_WORD_THIS_IS_HIGH      (ID_TUNER + 0x02)
-#define TUNER_WORD_THIS_IS_LOW       (ID_TUNER + 0x03)
-
 //actors
 #define LOOKAT_WORD_HELLO            (ID_LOOK_AT + 0x00)
 #define LOOKAT_WORD_LOOK_AROUND      (ID_LOOK_AT + 0x01)
@@ -62,29 +43,13 @@
 #define THUNDER_WORD_RRRRR           (ID_THUNDER + 0x01)
 #define THUNDER_WORD_LEFT            (ID_THUNDER + 0x02)
 
-#define ROCKING_WORD_HELLO           (ID_ROCKING + 0x00)
-#define ROCKING_WORD_ROCK_ROCK_ROCK  (ID_ROCKING + 0x01)
-
 #define BAG_WORD_HELLO               (ID_BAG + 0x00)
 #define BAG_WORD_HANDLE_UP           (ID_BAG + 0x01)
 #define BAG_WORD_HANDLE_DOWN         (ID_BAG + 0x02)
 #define BAG_WORD_SING                (ID_BAG + 0x03)
 
-#define HARMONICA_WORD_HELLO         (ID_HARMONICA + 0x00)
-#define HARMONICA_WORD_PLAY_START    (ID_HARMONICA + 0x01)
-#define HARMONICA_WORD_PLAY_STOP     (ID_HARMONICA + 0x02)
-
 #define FUR_WORD_HELLO               (ID_FUR + 0x00)
 #define FUR_WORD_SING                (ID_FUR + 0x01)
-
-#define HANGER_WORD_HELLO            (ID_HANGER + 0x00)
-#define HANGER_WORD_SING             (ID_HANGER + 0x01)
-
-#define KEYHOLDER_WORD_HELLO         (ID_KEYHOLDER + 0x00)
-#define KEYHOLDER_WORD_FALLING_KEYS  (ID_KEYHOLDER + 0x01)
-
-#define MIRROR_WORD_HELLO            (ID_MIRROR + 0x00)
-#define MIRROR_WORD_IWILLSHOWYOU     (ID_MIRROR + 0x01)
 
 #define PEAK_WORD_HELLO              (ID_PEAK + 0x00)
 #define PEAK_WORD_PPI_PPI_PPI        (ID_PEAK + 0x01)
@@ -94,6 +59,3 @@
 
 #define FLOAT_WORD_HELLO             (ID_FLOAT + 0x00)
 #define FLOAT_WORD_TURN_TURN         (ID_FLOAT + 0x01)
-
-#define HEATER_WORD_HELLO            (ID_HEATER + 0x00)
-#define HEATER_WORD_NOISY_NOISY      (ID_HEATER + 0x01)

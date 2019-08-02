@@ -12,44 +12,8 @@
 #if (IDENTITY == ID_CONDUCTOR)
 #include "../members/conductor.cpp"
 //
-#elif (IDENTITY == ID_MOTION_SENSOR)
-#include "../members/motion.cpp"
-//
-#elif (IDENTITY == ID_RELAY_CTRLER)
-#include "../members/relay.cpp"
-//
-#elif (IDENTITY == ID_POINT_MOTOR)
-#include "../members/pointer.cpp"
-//
-#elif (IDENTITY == ID_LOOK_AT)
-#include "../members/lookat.cpp"
-//
-#elif (IDENTITY == ID_THUNDER)
-#include "../members/thunder.cpp"
-//
-#elif (IDENTITY == ID_ROCKING)
-#include "../members/rocking.cpp"
-//
-#elif (IDENTITY == ID_DISTANCE)
-#include "../members/distance.cpp"
-//
 #elif (IDENTITY == ID_BAG)
 #include "../members/bag.cpp"
-//
-#elif (IDENTITY == ID_HARMONICA)
-#include "../members/harmonica.cpp"
-//
-#elif (IDENTITY == ID_FUR)
-#include "../members/fur.cpp"
-//
-#elif (IDENTITY == ID_KEYHOLDER)
-#include "../members/keyholder.cpp"
-//
-#elif (IDENTITY == ID_MIRROR)
-#include "../members/mirror.cpp"
-//
-#elif (IDENTITY == ID_PEAK)
-#include "../members/peak.cpp"
 //
 #elif (IDENTITY == ID_BELL)
 #include "../members/bell.cpp"
@@ -57,20 +21,17 @@
 #elif (IDENTITY == ID_FLOAT)
 #include "../members/float.cpp"
 //
-#elif (IDENTITY == ID_HEATER)
-#include "../members/heater.cpp"
+#elif (IDENTITY == ID_FUR)
+#include "../members/fur.cpp"
 //
-#elif (IDENTITY == ID_GPS)
-#include "../members/gps.cpp"
+#elif (IDENTITY == ID_LOOK_AT)
+#include "../members/lookat.cpp"
 //
-#elif (IDENTITY == ID_DOOR)
-#include "../members/door.cpp"
+#elif (IDENTITY == ID_PEAK)
+#include "../members/peak.cpp"
 //
-#elif (IDENTITY == ID_TUNER)
-#include "../members/tuner.cpp"
-//
-#elif (IDENTITY == ID_HANGER)
-#include "../members/hanger.cpp"
+#elif (IDENTITY == ID_THUNDER)
+#include "../members/thunder.cpp"
 //
 #endif
 
