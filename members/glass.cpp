@@ -22,8 +22,8 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     // so, what to do, then?
     switch (message)
     {
-    case FLOAT_WORD_TURN_TURN:
-      Serial.println("float: turn turn ");
+    case GLASS_WORD_PLAYTIME:
+      Serial.println("glass: play start ");
       fastturn_task.restartDelayed(100);
       break;
     default:
@@ -57,35 +57,35 @@ Task reaction_task(10, 17, &reaction);
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], FLOAT_WORD_HELLO); //"(turn turn turn)"
+  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], GLASS_WORD_HELLO); //"(criririririri)"
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }
 Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
-// routine
-extern Task routine_task;
-void routine() {
+// arrow_msg
+extern Task arrow_msg_task;
+void arrow_msg() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_THUNDER, THUNDER_WORD_RRRRR);
+  sprintf(msg_cstr, "[%06d:%03d]", ID_ARROW, ARROW_WORD_CHANGE);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*5, 1000*60*10));
+  arrow_msg_task.restartDelayed(random(1000*20, 1000*60));
 }
-Task routine_task(0, TASK_ONCE, &routine);
+Task arrow_msg_task(0, TASK_ONCE, &arrow_msg);
 
+// play sequences
+// note_1
 void fastturn() {
   int r = random(400, 800);
   analogWrite(D6,r);
   Serial.print("fast:");
   Serial.println(r);
   slowturn_task.restartDelayed(20000);
-
 }
 Task fastturn_task(0, TASK_ONCE, &fastturn);
-
-// handle down
+// note_2
 void slowturn() {
   int r = random(200, 400);
   Serial.print("slow:");
@@ -94,31 +94,29 @@ void slowturn() {
   rest_task.restartDelayed(15000);
 }
 Task slowturn_task(0, TASK_ONCE, &slowturn);
-
+// fin
 void rest() {
   analogWrite(D6,0);
-  // fastturn_task.restartDelayed(100);
 }
 Task rest_task(0, TASK_ONCE, &rest);
 
-
+//
 void setup_member() {
   //random seed
   randomSeed(analogRead(0));
 
-  //i2c master
+  //pwm out
   pinMode(D6, OUTPUT);
 
   runner.addTask(saying_greeting);
   saying_greeting.enable();
-  runner.addTask(routine_task);
-  routine_task.enable();
+  runner.addTask(arrow_msg_task);
+  arrow_msg_task.enable();
 
   runner.addTask(fastturn_task);
   runner.addTask(slowturn_task);
   runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  //rest_task.restartDelayed(500);
-  fastturn_task.restartDelayed(100);
+  rest_task.restartDelayed(500);
 }

@@ -12,26 +12,41 @@
 #if (IDENTITY == ID_CONDUCTOR)
 #include "../members/conductor.cpp"
 //
-#elif (IDENTITY == ID_BAG)
-#include "../members/bag.cpp"
-//
 #elif (IDENTITY == ID_BELL)
 #include "../members/bell.cpp"
 //
 #elif (IDENTITY == ID_FLOAT)
 #include "../members/float.cpp"
 //
+#elif (IDENTITY == ID_BAG)
+#include "../members/bag.cpp"
+//
+#elif (IDENTITY == ID_LOOK)
+#include "../members/lookat.cpp"
+//
+#elif (IDENTITY == ID_WINDMILL)
+#include "../members/windmill.cpp"
+//
+#elif (IDENTITY == ID_GLASS)
+#include "../members/glass.cpp"
+//
+#elif (IDENTITY == ID_REEL)
+#include "../members/reel.cpp"
+//
+#elif (IDENTITY == ID_ARROW)
+#include "../members/arrow.cpp"
+//
+#elif (IDENTITY == ID_THUNDER)
+#include "../members/thunder.cpp"
+//
 #elif (IDENTITY == ID_FUR)
 #include "../members/fur.cpp"
-//
-#elif (IDENTITY == ID_LOOK_AT)
-#include "../members/lookat.cpp"
 //
 #elif (IDENTITY == ID_PEAK)
 #include "../members/peak.cpp"
 //
-#elif (IDENTITY == ID_THUNDER)
-#include "../members/thunder.cpp"
+#elif (IDENTITY == ID_KEYBED)
+#include "../members/keybed.cpp"
 //
 #endif
 

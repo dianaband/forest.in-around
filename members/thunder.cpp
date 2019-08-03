@@ -7,9 +7,6 @@ extern Task rrrrr_task;
 extern Task saying_greeting;
 bool rrrrr_new = false;
 
-//
-extern Task msg_harmonica_task;
-
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -33,8 +30,6 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
       Serial.println("thunder: here we go! rrrrrrrrrrrr!");
       rrrrr_new = true;
       rrrrr_task.restartDelayed(2000);
-      // // also, 'harmonica'!
-      // msg_harmonica_task.restartDelayed(12000);
       break;
     default:
       ;
@@ -157,15 +152,6 @@ void rrrrr() {
 }
 Task rrrrr_task(0, TASK_ONCE, &rrrrr);
 
-// msg_harmonica
-void msg_harmonica() {
-  // also, harmonica!
-  sprintf(msg_cstr, "[%06d:%03d] To harmonica: you, too, amigo!", ID_HARMONICA, HARMONICA_WORD_PLAY_START);
-  String str = String(msg_cstr);
-  mesh.sendBroadcast(str);
-}
-Task msg_harmonica_task(0, TASK_ONCE, &msg_harmonica);
-
 //setup_member
 void setup_member() {
   //i2c master
@@ -179,7 +165,4 @@ void setup_member() {
 
   runner.addTask(rrrrr_task);
   runner.addTask(reaction_task);
-
-  //msg
-  runner.addTask(msg_harmonica_task);
 }

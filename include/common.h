@@ -1,32 +1,40 @@
 #pragma once
 
 // member identity
-#define ID_BAG           (0x1D00 + 0x10)
 #define ID_BELL          (0x1D00 + 0x20)
-#define ID_CONDUCTOR     (0x1D00 + 0x30)
-#define ID_FLOAT         (0x1D00 + 0x40)
-#define ID_FUR           (0x1D00 + 0x50)
-#define ID_LOOK_AT       (0x1D00 + 0x60)
-#define ID_PEAK          (0x1D00 + 0x70)
-#define ID_THUNDER       (0x1D00 + 0x80)
-
-// #define ID_TUNER         (0x1E00 + 0x30)
-
-//
+#define ID_FLOAT         (0x1D00 + 0x30)
+#define ID_BAG           (0x1D00 + 0x40)
+#define ID_LOOK          (0x1D00 + 0x50)
+#define ID_WINDMILL      (0x1D00 + 0x60)
+#define ID_GLASS         (0x1D00 + 0x70)
+#define ID_REEL          (0x1D00 + 0x80)
+#define ID_ARROW         (0x1D00 + 0x90)
+#define ID_THUNDER       (0x1D00 + 0xA0)
+#define ID_FUR           (0x1D00 + 0xB0)
+#define ID_PEAK          (0x1D00 + 0xC0)
+#define ID_KEYBED        (0x1D00 + 0xD0)
+// (special agent)
+#define ID_CONDUCTOR     (0x1E00 + 0x10)
+// (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
-//(choice)
-#define IDENTITY         ID_FLOAT
+// (choice)
+#define IDENTITY         ID_PEAK
 
-#define NUM_OF_MEMBERS 16
+#define NUM_OF_MEMBERS 13
 int memberList[NUM_OF_MEMBERS] = {
-  ID_BAG, //1
-  ID_BELL, //2
-  ID_CONDUCTOR, //3
-  ID_FLOAT, //4
-  ID_FUR, //5
-  ID_LOOK_AT, //6
-  ID_PEAK, //7
-  ID_THUNDER //8
+  ID_BELL, // 1
+  ID_FLOAT, // 2
+  ID_BAG, // 3
+  ID_LOOK, // 4
+  ID_WINDMILL, // 5
+  ID_GLASS, // 6
+  ID_REEL, // 7
+  ID_ARROW, // 8
+  ID_THUNDER, // 9
+  ID_FUR, // 10
+  ID_PEAK, // 11
+  ID_KEYBED, // 12
+  ID_CONDUCTOR // 13
 };
 
 //

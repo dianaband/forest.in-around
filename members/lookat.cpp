@@ -27,8 +27,8 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     // so, what to do, then?
     switch (message)
     {
-    case LOOKAT_WORD_LOOK_AROUND:
-      Serial.println("lookat: me to looking around?? well, but where?");
+    case LOOK_WORD_LOOK_AROUND:
+      Serial.println("look: me to looking around?? well, but where?");
       lookat_task.restart();
       break;
     default:
@@ -62,7 +62,7 @@ Task reaction_task(10, 17, &reaction);
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], LOOKAT_WORD_HELLO); //"Me? I do look at you!"
+  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], LOOK_WORD_HELLO); //"Me? I do look at you!"
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }
@@ -72,11 +72,11 @@ Task saying_greeting(10000, TASK_FOREVER, &greeting);
 extern Task routine_task;
 void routine() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_ROCKING, ROCKING_WORD_ROCK_ROCK_ROCK);
+  sprintf(msg_cstr, "[%06d:%03d]", ID_BELL, BELL_WORD_RING_RING_RING);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*5, 1000*60*7));
+  routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
 }
 Task routine_task(0, TASK_ONCE, &routine);
 

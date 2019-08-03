@@ -67,17 +67,17 @@ void greeting() {
 }
 Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
-// routine
-extern Task routine_task;
-void routine() {
+// reel_msg
+extern Task reel_msg_task;
+void reel_msg() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_MIRROR, MIRROR_WORD_IWILLSHOWYOU);
+  sprintf(msg_cstr, "[%06d:%03d]", ID_REEL, REEL_WORD_PLAYTIME);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*2, 1000*60*3));
+  reel_msg_task.restartDelayed(random(1000*60*3, 1000*60*7));
 }
-Task routine_task(0, TASK_ONCE, &routine);
+Task reel_msg_task(0, TASK_ONCE, &reel_msg);
 
 // sing!
 void signal() {
@@ -100,8 +100,8 @@ void setup_member() {
   //tasks
   runner.addTask(saying_greeting);
   saying_greeting.enable();
-  runner.addTask(routine_task);
-  routine_task.enable();
+  runner.addTask(reel_msg_task);
+  reel_msg_task.enable();
 
   runner.addTask(signal_task);
   runner.addTask(reaction_task);

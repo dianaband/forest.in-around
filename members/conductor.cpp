@@ -46,7 +46,7 @@ void compose_send_display_msg()
   // compose the message and send!
   switch(states) {
   case 0:
-    sprintf(msg_cstr, "[%06d:%03d] To lookat: look around now!", ID_LOOK_AT, LOOKAT_WORD_LOOK_AROUND);
+    sprintf(msg_cstr, "[%06d:%03d] To look: look around now!", ID_LOOK, LOOK_WORD_LOOK_AROUND);
     break;
   case 1:
     sprintf(msg_cstr, "[%06d:%03d] To thunder: go rrrrrrrrr now!", ID_THUNDER, THUNDER_WORD_RRRRR);
@@ -88,7 +88,7 @@ void compose_send_display_msg()
     sprintf(msg_cstr, "[%06d:%03d] To rocking: time to rock!!", ID_ROCKING, ROCKING_WORD_ROCK_ROCK_ROCK);
     break;
   case 14:
-    sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
+    // sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
     break;
   default:
     ; // undefined

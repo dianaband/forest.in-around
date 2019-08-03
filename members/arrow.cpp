@@ -1,7 +1,9 @@
 //tasks
-extern Task fastturn_task;
-extern Task slowturn_task;
-extern Task rest_task;
+extern Task turn_task;
+extern Task rest_task; // not used, yet
+
+//global
+int speed = 300;
 
 // room protocol
 static int message = 0;
@@ -22,9 +24,10 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     // so, what to do, then?
     switch (message)
     {
-    case FLOAT_WORD_TURN_TURN:
-      Serial.println("float: turn turn ");
-      fastturn_task.restartDelayed(100);
+    case ARROW_WORD_CHANGE:
+      Serial.println("arrow: speed change! ");
+      //turn_task.restartDelayed(100);
+      speed = random(20, 300);
       break;
     default:
       ;
@@ -57,7 +60,7 @@ Task reaction_task(10, 17, &reaction);
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], FLOAT_WORD_HELLO); //"(turn turn turn)"
+  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], ARROW_WORD_HELLO); //"which direction is you?"
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }
@@ -67,46 +70,35 @@ Task saying_greeting(10000, TASK_FOREVER, &greeting);
 extern Task routine_task;
 void routine() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_THUNDER, THUNDER_WORD_RRRRR);
+  sprintf(msg_cstr, "[%06d:%03d]", ID_GLASS, GLASS_WORD_PLAYTIME);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*5, 1000*60*10));
+  routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
 }
 Task routine_task(0, TASK_ONCE, &routine);
 
-void fastturn() {
-  int r = random(400, 800);
-  analogWrite(D6,r);
-  Serial.print("fast:");
-  Serial.println(r);
-  slowturn_task.restartDelayed(20000);
-
+// play sequences
+// note_1
+void turn() {
+  analogWrite(D6,speed);
+  Serial.print("arrow_speed:");
+  Serial.println(speed);
+  turn_task.restartDelayed(1000); // speed updates every 1 sec.
 }
-Task fastturn_task(0, TASK_ONCE, &fastturn);
-
-// handle down
-void slowturn() {
-  int r = random(200, 400);
-  Serial.print("slow:");
-  Serial.println(r);
-  analogWrite(D6,r);
-  rest_task.restartDelayed(15000);
-}
-Task slowturn_task(0, TASK_ONCE, &slowturn);
-
+Task turn_task(0, TASK_ONCE, &turn);
+// fin
 void rest() {
   analogWrite(D6,0);
-  // fastturn_task.restartDelayed(100);
 }
 Task rest_task(0, TASK_ONCE, &rest);
 
-
+//
 void setup_member() {
   //random seed
   randomSeed(analogRead(0));
 
-  //i2c master
+  //pwm out
   pinMode(D6, OUTPUT);
 
   runner.addTask(saying_greeting);
@@ -114,11 +106,9 @@ void setup_member() {
   runner.addTask(routine_task);
   routine_task.enable();
 
-  runner.addTask(fastturn_task);
-  runner.addTask(slowturn_task);
+  runner.addTask(turn_task);
   runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  //rest_task.restartDelayed(500);
-  fastturn_task.restartDelayed(100);
+  turn_task.restartDelayed(100); // for TEST
 }

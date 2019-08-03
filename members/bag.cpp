@@ -90,7 +90,7 @@ Task saying_greeting(10000, TASK_FOREVER, &greeting);
 extern Task routine_task;
 void routine() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_FUR, FUR_WORD_SING);
+  sprintf(msg_cstr, "[%06d:%03d]", ID_WINDMILL, WINDMILL_WORD_BLOW);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //

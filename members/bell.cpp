@@ -83,11 +83,11 @@ Task saying_greeting(10000, TASK_FOREVER, &greeting);
 extern Task routine_task;
 void routine() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_HANGER, HANGER_WORD_SING);
+  sprintf(msg_cstr, "[%06d:%03d] To look: look around now!", ID_LOOK, LOOK_WORD_LOOK_AROUND);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*5, 1000*60*7));
+  routine_task.restartDelayed(random(1000, 10000));
 }
 Task routine_task(0, TASK_ONCE, &routine);
 
@@ -139,7 +139,7 @@ Task hit_task(100, 3, &hit);
 // msg_hanger
 void msg_hanger() {
   // also, hanger!
-  sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
+  // sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
   String str = String(msg_cstr);
   mesh.sendBroadcast(str);
 }
