@@ -46,56 +46,20 @@ void compose_send_display_msg()
   // compose the message and send!
   switch(states) {
   case 0:
-    sprintf(msg_cstr, "[%06d:%03d] To look: look around now!", ID_LOOK, LOOK_WORD_LOOK_AROUND);
+    sprintf(msg_cstr, "[%06d:%03d]", ID_REEL, REEL_WORD_PLAYTIME);
     break;
   case 1:
-    sprintf(msg_cstr, "[%06d:%03d] To thunder: go rrrrrrrrr now!", ID_THUNDER, THUNDER_WORD_RRRRR);
+    sprintf(msg_cstr, "[%06d:%03d]", ID_BAG, BAG_WORD_SING);
     break;
   case 2:
-    sprintf(msg_cstr, "[%06d:%03d] To bag: handle up now!", ID_BAG, BAG_WORD_HANDLE_UP);
-    break;
-  case 3:
-    sprintf(msg_cstr, "[%06d:%03d] To bag: handle down now!", ID_BAG, BAG_WORD_HANDLE_DOWN);
-    break;
-  case 4:
-    sprintf(msg_cstr, "[%06d:%03d] To bag: sing now!", ID_BAG, BAG_WORD_SING);
-    break;
-  case 5:
-    sprintf(msg_cstr, "[%06d:%03d] To harmonica: harmonica time! ha-mororo~~", ID_HARMONICA, HARMONICA_WORD_PLAY_START);
-    break;
-  case 6:
-    sprintf(msg_cstr, "[%06d:%03d] To fur: speak out now!", ID_FUR, FUR_WORD_SING);
-    break;
-  case 7:
-    sprintf(msg_cstr, "[%06d:%03d] To keyholder: now falling falling!", ID_KEYHOLDER, KEYHOLDER_WORD_FALLING_KEYS);
-    break;
-  case 8:
-    sprintf(msg_cstr, "[%06d:%03d] To mirror: show me, please!", ID_MIRROR, MIRROR_WORD_IWILLSHOWYOU);
-    break;
-  case 9:
-    sprintf(msg_cstr, "[%06d:%03d] To peak: signal signal!", ID_PEAK, PEAK_WORD_PPI_PPI_PPI);
-    break;
-  case 10:
-    sprintf(msg_cstr, "[%06d:%03d] To bell: ring your bell!", ID_BELL, BELL_WORD_RING_RING_RING);
-    break;
-  case 11:
-    sprintf(msg_cstr, "[%06d:%03d] To float: turn turn and float!", ID_FLOAT, FLOAT_WORD_TURN_TURN);
-    break;
-  case 12:
-    sprintf(msg_cstr, "[%06d:%03d] To heater: again noisy?!", ID_HEATER, HEATER_WORD_NOISY_NOISY );
-    break;
-  case 13:
-    sprintf(msg_cstr, "[%06d:%03d] To rocking: time to rock!!", ID_ROCKING, ROCKING_WORD_ROCK_ROCK_ROCK);
-    break;
-  case 14:
-    // sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
+    sprintf(msg_cstr, "[%06d:%03d]", ID_PEAK, PEAK_WORD_PPI_PPI_PPI);
     break;
   default:
     ; // undefined
   }
   //
   states++;
-  if (states == 15) {
+  if (states == 3) {
     states = 0;
   }
   //
@@ -159,8 +123,8 @@ void setup_member() {
   // runner.addTask(button_task);
   // button_task.enable();
   //
-  // runner.addTask(words_looping_task);
-  // words_looping_task.enable();
+  runner.addTask(words_looping_task);
+  words_looping_task.enable();
   //
   runner.addTask(reaction_task);
 }

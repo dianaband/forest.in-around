@@ -53,6 +53,11 @@
 // painless mesh
 painlessMesh mesh;
 
+// firmata
+#if (FIRMATA_USE == FIRMATA_ON)
+#include <Firmata.h>
+#endif
+
 //scheduler
 Scheduler runner;
 
@@ -160,8 +165,12 @@ void setup() {
   system_phy_set_max_tpw(0);
   node_type = WIFI_STA;
 #endif
+#if (FIRMATA_USE == FIRMATA_ON)
+  mesh.setDebugMsgTypes( ERROR );
+#elif (FIRMATA_USE == FIRMATA_OFF)
   // mesh.setDebugMsgTypes(ERROR | DEBUG | CONNECTION);
   mesh.setDebugMsgTypes( ERROR | STARTUP );
+#endif
   mesh.init(MESH_SSID, MESH_PASSWORD, &runner, MESH_PORT, node_type, MESH_CHANNEL);
 
   //
@@ -181,6 +190,11 @@ void setup() {
   runner.addTask(statusblinks);
   statusblinks.enable();
 
+#if (FIRMATA_USE == FIRMATA_ON)
+  Firmata.setFirmwareVersion(0,1);
+  Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
+  Firmata.begin(57600);
+#elif (FIRMATA_USE == FIRMATA_OFF)
   //serial
   Serial.begin(9600);
   delay(100);
@@ -189,6 +203,7 @@ void setup() {
   Serial.println(IDENTITY, HEX);
 #if (NODE_TYPE == NODE_TYPE_STA_ONLY)
   Serial.println("INFO: we are in the WIFI_STA mode!");
+#endif
 #endif
 
   //setup_member
@@ -202,5 +217,11 @@ void loop() {
   digitalWrite(LED_PIN, onFlag); // value == true is ON.
 #else
   digitalWrite(LED_PIN, !onFlag); // value == false is ON. so onFlag == true is ON. (pull-up)
+#endif
+
+#if (FIRMATA_USE == FIRMATA_ON)
+  while (Firmata.available()) {
+    Firmata.processInput();
+  }
 #endif
 }

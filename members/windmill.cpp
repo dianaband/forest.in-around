@@ -2,6 +2,9 @@
 extern Task on_task;
 extern Task off_task;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -24,6 +27,23 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case WINDMILL_WORD_BLOW:
       Serial.println("windmill: blow start ");
       on_task.restartDelayed(100);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
       break;
     default:
       ;
@@ -68,9 +88,14 @@ void bag_msg_sing() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_BAG, BAG_WORD_SING);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
   //
-  bag_msg_sing_task.restartDelayed(random(1000*60*5, 1000*60*7));
+  if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
+  } else if (mood == MOOD_LOW) {
+    // do nothing.
+  }
+  //
+  bag_msg_sing_task.restartDelayed(random(1000*60*3, 1000*60*4));
 }
 Task bag_msg_sing_task(0, TASK_ONCE, &bag_msg_sing);
 

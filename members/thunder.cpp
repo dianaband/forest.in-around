@@ -7,6 +7,9 @@ extern Task rrrrr_task;
 extern Task saying_greeting;
 bool rrrrr_new = false;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -30,6 +33,23 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
       Serial.println("thunder: here we go! rrrrrrrrrrrr!");
       rrrrr_new = true;
       rrrrr_task.restartDelayed(2000);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
       break;
     default:
       ;

@@ -18,7 +18,7 @@
 // (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
 // (choice)
-#define IDENTITY         ID_PEAK
+#define IDENTITY         ID_BELL
 
 #define NUM_OF_MEMBERS 13
 int memberList[NUM_OF_MEMBERS] = {
@@ -46,6 +46,19 @@ int memberList[NUM_OF_MEMBERS] = {
 //
 #include <painlessMesh.h>
 extern painlessMesh mesh;
+
+// mood
+#define MOOD_LOW            (0x300D0001)
+#define MOOD_HIGH           (0x300D0002)
+
+// firmata connectivity
+#define FIRMATA_ON          (0xF13A0001)
+#define FIRMATA_OFF         (0xF13A0002)
+#define FIRMATA_USE         FIRMATA_OFF
+#if (IDENTITY == ID_KEYBED)
+#undef FIRMATA_USE
+#define FIRMATA_USE         FIRMATA_ON
+#endif
 
 //NOTE: disabling AP beacon for speaker accompanied devices!
 #define NODE_TYPE_AP_STA    (0x40DE0001)

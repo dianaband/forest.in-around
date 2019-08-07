@@ -2,6 +2,9 @@
 extern Task on_task;
 extern Task off_task;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -24,6 +27,24 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case REEL_WORD_PLAYTIME:
       Serial.println("reel: play time! ");
       on_task.restartDelayed(100);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
+      off_task.restartDelayed(100);
       break;
     default:
       ;
@@ -68,9 +89,14 @@ void peak_msg_ppippi() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_PEAK, PEAK_WORD_PPI_PPI_PPI);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
   //
-  peak_msg_ppippi_task.restartDelayed(random(1000*60*5, 1000*60*7));
+  if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
+  } else if (mood == MOOD_LOW) {
+    // do nothing
+  }
+  //
+  peak_msg_ppippi_task.restartDelayed(random(1000*60*4, 1000*60*5));
 }
 Task peak_msg_ppippi_task(0, TASK_ONCE, &peak_msg_ppippi);
 

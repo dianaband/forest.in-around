@@ -73,3 +73,5 @@
 #define PEAK_WORD_PPI_PPI_PPI        (ID_PEAK + 0x01)
 
 #define KEYBED_WORD_HELLO            (ID_KEYBED + 0x00)
+#define KEYBED_WORD_ACTIVE           (ID_KEYBED + 0x01)
+#define KEYBED_WORD_FREE             (ID_KEYBED + 0x02)

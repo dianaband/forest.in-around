@@ -7,6 +7,9 @@
 
 extern Task signal_task;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -29,6 +32,28 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case PEAK_WORD_PPI_PPI_PPI:
       Serial.println("peak: ppi ppi ppi");
       signal_task.restartDelayed(500);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
+      // "SXXXXXXXXX" - S: S (stop)
+      sprintf(cmdstr, "SXXXXXXXXX"); // stop!
+      Wire.beginTransmission(I2C_ADDR);
+      Wire.write(cmdstr, CMD_LENGTH);
+      Wire.endTransmission();
       break;
     default:
       ;
@@ -73,9 +98,14 @@ void reel_msg() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_REEL, REEL_WORD_PLAYTIME);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
   //
-  reel_msg_task.restartDelayed(random(1000*60*3, 1000*60*7));
+  if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
+  } else if (mood == MOOD_LOW) {
+    // do nothing
+  }
+  //
+  reel_msg_task.restartDelayed(random(1000*60*4, 1000*60*7));
 }
 Task reel_msg_task(0, TASK_ONCE, &reel_msg);
 

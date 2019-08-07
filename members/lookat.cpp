@@ -8,6 +8,9 @@ extern Task servo_release_task;
 extern Task lookat_task;
 extern Task saying_greeting;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -30,6 +33,23 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case LOOK_WORD_LOOK_AROUND:
       Serial.println("look: me to looking around?? well, but where?");
       lookat_task.restart();
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
       break;
     default:
       ;
@@ -76,13 +96,17 @@ void routine() {
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
+  if (mood == MOOD_HIGH) {
+    routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
+  } else if (mood == MOOD_LOW) {
+    routine_task.restartDelayed(1000*60*5);
+  }
 }
 Task routine_task(0, TASK_ONCE, &routine);
 
 // looking around once.
 void lookat() {
-  int angle = random(0, 180);
+  int angle = random(30, 150);
   //
   Serial.print("i will look at now @ ");
   Serial.print(angle);

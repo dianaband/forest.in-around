@@ -8,6 +8,9 @@
 // my tasks
 extern Task sing_task;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -30,6 +33,23 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case FUR_WORD_SING:
       Serial.println("fur: khcuk huk, kch!");
       sing_task.restartDelayed(500);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
       break;
     default:
       ;

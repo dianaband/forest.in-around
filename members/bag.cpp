@@ -18,6 +18,9 @@ extern Task handle_release_task;
 extern Task sing_task;
 extern Task saying_greeting;
 
+// mood
+int mood = MOOD_LOW;
+
 // room protocol
 static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
@@ -48,6 +51,28 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case BAG_WORD_SING:
       Serial.println("bag: s-i-n-g, now!");
       sing_task.restartDelayed(2000);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
+      // "SXXXXXXXXX" - S: S (stop)
+      sprintf(cmdstr, "SXXXXXXXXX"); // stop!
+      Wire.beginTransmission(I2C_ADDR);
+      Wire.write(cmdstr, CMD_LENGTH);
+      Wire.endTransmission();
       break;
     default:
       ;

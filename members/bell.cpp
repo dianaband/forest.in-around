@@ -19,8 +19,8 @@ int control_count = 0;
 //
 extern Task servo_release_task;
 
-//
-extern Task msg_hanger_task;
+// mood
+int mood = MOOD_LOW;
 
 // room protocol
 static int message = 0;
@@ -39,8 +39,23 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     case BELL_WORD_RING_RING_RING:
       Serial.println("bell: ring ring.");
       hit_task.restartDelayed(100);
-      // also, 'hanger'!
-      msg_hanger_task.restartDelayed(800);
+      break;
+    default:
+      ;
+    }
+  }
+  //
+  if (receipent == ID_EVERYONE) {
+    // what it says?
+    message = msg.substring(8, 12).toInt();
+    // so, what to do, then?
+    switch (message)
+    {
+    case KEYBED_WORD_FREE:
+      mood = MOOD_HIGH;
+      break;
+    case KEYBED_WORD_ACTIVE:
+      mood = MOOD_LOW;
       break;
     default:
       ;
@@ -87,7 +102,13 @@ void routine() {
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  routine_task.restartDelayed(random(1000, 10000));
+  if (mood == MOOD_HIGH) {
+    routine_task.restartDelayed(random(1500, 5000));
+    //routine_task.restartDelayed(1000);
+  } else if (mood == MOOD_LOW) {
+    routine_task.restartDelayed(random(5000, 20000));
+    //routine_task.restartDelayed(10000);
+  }
 }
 Task routine_task(0, TASK_ONCE, &routine);
 
@@ -135,15 +156,6 @@ void hit() {
   count++;
 }
 Task hit_task(100, 3, &hit);
-
-// msg_hanger
-void msg_hanger() {
-  // also, hanger!
-  // sprintf(msg_cstr, "[%06d:%03d] To hanger: you, too, amigo!", ID_HANGER, HANGER_WORD_SING);
-  String str = String(msg_cstr);
-  mesh.sendBroadcast(str);
-}
-Task msg_hanger_task(0, TASK_ONCE, &msg_hanger);
 
 // pcontrol
 void pcontrol() {
@@ -211,8 +223,6 @@ void setup_member() {
   runner.addTask(pcontrol_task);
 
   runner.addTask(servo_release_task);
-
-  runner.addTask(msg_hanger_task);
 
   hit_task.restart();
 }
