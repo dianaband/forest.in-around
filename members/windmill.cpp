@@ -1,6 +1,6 @@
 //tasks
-extern Task on_task;
-extern Task off_task;
+bool blow_new = false;
+extern Task blow_task;
 
 // mood
 int mood = MOOD_LOW;
@@ -26,7 +26,8 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     {
     case WINDMILL_WORD_BLOW:
       Serial.println("windmill: blow start ");
-      on_task.restartDelayed(100);
+      blow_new = true;
+      blow_task.restartDelayed(100);
       break;
     default:
       ;
@@ -109,23 +110,52 @@ void bag_msg_handle() {
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   //
-  bag_msg_handle_task.restartDelayed(random(1000*60*5, 1000*60*7));
+  bag_msg_handle_task.restartDelayed(random(1000*60*1, 1000*60*2));
 }
 Task bag_msg_handle_task(0, TASK_ONCE, &bag_msg_handle);
 
-// switch 'on'
-void on() {
-  digitalWrite(D6, HIGH);
-  Serial.print("pin D6 <= HIGH.");
-  off_task.restartDelayed(20000);
+// 'blow'
+void blow() {
+  static int blow_spd = 1023;
+  static int blow_count = 0;
+  if (blow_new == true) {
+    blow_new = false;
+    blow_count = 0;
+  }
+  switch(random(5))
+  {
+  case 0:
+    blow_spd = 1023;
+    break;
+  case 1:
+    blow_spd = 900;
+    break;
+  case 2:
+    blow_spd = 800;
+    break;
+  case 3:
+    blow_spd = 700;
+    break;
+  case 4:
+    blow_spd = 600;
+    break;
+  default:
+    ;
+  }
+  if (blow_count == 24) {
+    //
+    digitalWrite(D6, LOW);
+    Serial.print("pin D6 <= LOW.");
+    //
+  } else {
+    analogWrite(D6, blow_spd);
+    //
+    blow_task.restartDelayed(random(100, 1000));
+  }
+  //
+  blow_count++;
 }
-Task on_task(0, TASK_ONCE, &on);
-// off
-void off() {
-  digitalWrite(D6, LOW);
-  Serial.print("pin D6 <= LOW.");
-}
-Task off_task(0, TASK_ONCE, &off);
+Task blow_task(0, TASK_ONCE, &on);
 
 //
 void setup_member() {
@@ -142,10 +172,8 @@ void setup_member() {
   runner.addTask(bag_msg_handle_task);
   bag_msg_handle_task.enable();
 
-  runner.addTask(on_task);
-  runner.addTask(off_task);
+  runner.addTask(blow_task);
   runner.addTask(reaction_task);
 
-  //off_task.restartDelayed(100);
-  on_task.restartDelayed(100);
+  blow_task.restartDelayed(100);
 }

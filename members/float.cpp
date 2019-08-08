@@ -96,7 +96,7 @@ void routine() {
 Task routine_task(0, TASK_ONCE, &routine);
 
 void fastturn() {
-  int r = random(400, 800);
+  int r = random(400, 600);
   analogWrite(D6,r);
   Serial.print("fast:");
   Serial.println(r);
