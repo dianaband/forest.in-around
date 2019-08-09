@@ -128,16 +128,16 @@ void blow() {
     blow_spd = 1023;
     break;
   case 1:
-    blow_spd = 900;
+    blow_spd = 1023;
     break;
   case 2:
-    blow_spd = 800;
+    blow_spd = 0;
     break;
   case 3:
-    blow_spd = 700;
+    blow_spd = 1023;
     break;
   case 4:
-    blow_spd = 600;
+    blow_spd = 1023;
     break;
   default:
     ;
@@ -150,12 +150,16 @@ void blow() {
   } else {
     analogWrite(D6, blow_spd);
     //
-    blow_task.restartDelayed(random(100, 1000));
+    if (blow_spd == 0) {
+      blow_task.restartDelayed(random(100, 1000));
+    } else {
+      blow_task.restartDelayed(random(1000, 10000));
+    }
   }
   //
   blow_count++;
 }
-Task blow_task(0, TASK_ONCE, &on);
+Task blow_task(0, TASK_ONCE, &blow);
 
 //
 void setup_member() {
