@@ -104,7 +104,7 @@ Task peak_msg_ppippi_task(0, TASK_ONCE, &peak_msg_ppippi);
 void on() {
   digitalWrite(D6, HIGH);
   Serial.print("pin D6 <= HIGH.");
-  off_task.restartDelayed(1000*60*1.5);
+  off_task.restartDelayed(1000*60*(1 + random(5) * 0.1));
 }
 Task on_task(0, TASK_ONCE, &on);
 // off
