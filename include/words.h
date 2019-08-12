@@ -33,7 +33,7 @@
 //individual events
 
 //announcements
-#define CONDUCTOR_WORD_HELLO         (ID_CONDUCTOR + 0x00)
+#define CONDUCTOR_WORD_HELLO         (ID_MONITOR + 0x00)
 
 //actors
 #define BELL_WORD_HELLO              (ID_BELL + 0x00)

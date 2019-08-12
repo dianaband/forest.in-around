@@ -9,8 +9,8 @@
 #include "common.h"
 
 // the members lounge
-#if (IDENTITY == ID_CONDUCTOR)
-#include "../members/conductor.cpp"
+#if (IDENTITY == ID_MONITOR)
+#include "../members/monitor.cpp"
 //
 #elif (IDENTITY == ID_BELL)
 #include "../members/bell.cpp"

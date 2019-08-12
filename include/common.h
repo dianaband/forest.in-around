@@ -14,11 +14,11 @@
 #define ID_PEAK          (0x1D00 + 0xC0)
 #define ID_KEYBED        (0x1D00 + 0xD0)
 // (special agent)
-#define ID_CONDUCTOR     (0x1E00 + 0x10)
+#define ID_MONITOR     (0x1E00 + 0x10)
 // (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
 // (choice)
-#define IDENTITY         ID_BAG
+#define IDENTITY         ID_MONITOR
 
 #define NUM_OF_MEMBERS 13
 int memberList[NUM_OF_MEMBERS] = {
@@ -34,7 +34,7 @@ int memberList[NUM_OF_MEMBERS] = {
   ID_FUR, // 10
   ID_PEAK, // 11
   ID_KEYBED, // 12
-  ID_CONDUCTOR // 13
+  ID_MONITOR // 13
 };
 
 //
