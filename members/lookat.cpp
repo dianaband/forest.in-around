@@ -106,7 +106,7 @@ Task routine_task(0, TASK_ONCE, &routine);
 
 // looking around once.
 void lookat() {
-  int angle = random(30, 150);
+  int angle = random(40, 140);
   //
   Serial.print("i will look at now @ ");
   Serial.print(angle);

@@ -1,6 +1,6 @@
 //HACK: let auto-poweroff speakers stay turned ON! - (creative muvo mini)
 #define IDLE_FREQ 22000
-#define IDLE_AMP 0.005
+#define IDLE_AMP 0.05
 
 //teensy audio
 #include <Audio.h>

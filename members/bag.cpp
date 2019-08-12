@@ -8,7 +8,7 @@
 static Servo myservo;
 //#define HANDLE_UP_TARGET 45 // MIN
 #define HANDLE_UP_TARGET 50 // for 90 deg.
-#define HANDLE_DOWN_TARGET 151 // MAX
+#define HANDLE_DOWN_TARGET 147 // MAX
 // #define HANDLE_DOWN_TARGET 153 // for firm close
 
 // my tasks

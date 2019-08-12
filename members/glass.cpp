@@ -98,7 +98,7 @@ Task arrow_msg_task(0, TASK_ONCE, &arrow_msg);
 // play sequences
 // note_1
 void fastturn() {
-  int r = random(400, 700);
+  int r = random(400, 600);
   analogWrite(D6,r);
   Serial.print("fast:");
   Serial.println(r);
@@ -107,7 +107,7 @@ void fastturn() {
 Task fastturn_task(0, TASK_ONCE, &fastturn);
 // note_2
 void slowturn() {
-  int r = random(250, 400);
+  int r = random(300, 400);
   Serial.print("slow:");
   Serial.println(r);
   analogWrite(D6,r);
