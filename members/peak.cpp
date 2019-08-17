@@ -8,7 +8,7 @@
 extern Task signal_task;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -18,53 +18,56 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case PEAK_WORD_PPI_PPI_PPI:
-      Serial.println("peak: ppi ppi ppi");
-      signal_task.restartDelayed(500);
-      break;
-    default:
-      ;
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
+      mood = MOOD_HIGH;
     }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) {
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case PEAK_WORD_PPI_PPI_PPI:
+        Serial.println("peak: ppi ppi ppi");
+        signal_task.restartDelayed(500);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
         mood = MOOD_LOW;
         // "SXXXXXXXXX" - S: S (stop)
         sprintf(cmdstr, "SXXXXXXXXX"); // stop!
         Wire.beginTransmission(I2C_ADDR);
         Wire.write(cmdstr, CMD_LENGTH);
         Wire.endTransmission();
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        break;
+      default:
+        ;
       }
-      break;
-    case MONITOR_WORD_WAKEUP:
-      mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
     }
   }
 }
@@ -113,7 +116,7 @@ void reel_msg() {
   //
   if (mood == MOOD_HIGH) {
     mesh.sendBroadcast(msg);
-  } else if (mood == MOOD_LOW) {
+  } else {
     // do nothing
   }
   //

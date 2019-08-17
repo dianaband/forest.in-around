@@ -9,6 +9,9 @@
 // #endif
 //
 
+// mood
+int mood = MOOD_SLEEP;
+
 //tasks
 
 // room protocol
@@ -18,6 +21,8 @@ static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
+  if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) mood = MOOD_HIGH;
+  if (msg.substring(8, 12).toInt() == MONITOR_WORD_SLEEP) mood = MOOD_SLEEP;
 }
 
 //firmata
@@ -56,7 +61,11 @@ void analogWriteCallback(byte pin, int value){
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_HELLO); //"alien's terminal is me. ::)"
+  if (mood == MOOD_SLEEP) {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_HELLO); //"alien's terminal is me. ::)"
+  } else {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_SLEEPING); //"alien's zzzzzzzzzzzzzzzz. ::)"
+  }
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }

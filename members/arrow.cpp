@@ -1,12 +1,12 @@
 //tasks
 extern Task turn_task;
-extern Task rest_task; // not used, yet
+extern Task rest_task;
 
 //global
 int speed = 300;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -16,47 +16,55 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case ARROW_WORD_CHANGE:
-      Serial.println("arrow: speed change! ");
-      //turn_task.restartDelayed(100);
-      speed = random(20, 300);
-      break;
-    default:
-      ;
-    }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-      break;
-    case MONITOR_WORD_WAKEUP:
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
       mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
+      turn_task.restartDelayed(100);
+    }
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case ARROW_WORD_CHANGE:
+        Serial.println("arrow: speed change! ");
+        //turn_task.restartDelayed(100);
+        speed = random(20, 300);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
+        mood = MOOD_LOW;
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        turn_task.disable();
+        rest_task.restartDelayed(1000); // stop after 1 sec.
+        break;
+      default:
+        ;
+      }
     }
   }
 }
@@ -102,11 +110,15 @@ void routine() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_GLASS, GLASS_WORD_PLAYTIME);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
   //
   if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
     routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
   } else if (mood == MOOD_LOW) {
+    mesh.sendBroadcast(msg);
+    routine_task.restartDelayed(1000*60*5);
+  } else if (mood == MOOD_SLEEP) {
+    // do nothing
     routine_task.restartDelayed(1000*60*5);
   }
 }
@@ -118,7 +130,11 @@ void turn() {
   analogWrite(D6,speed);
   Serial.print("arrow_speed:");
   Serial.println(speed);
-  turn_task.restartDelayed(1000); // speed updates every 1 sec.
+  if (mood == MOOD_SLEEP) {
+    rest_task.restartDelayed(1000); // stop after 1 sec.
+  } else {
+    turn_task.restartDelayed(1000); // speed updates every 1 sec.
+  }
 }
 Task turn_task(0, TASK_ONCE, &turn);
 // fin
@@ -144,5 +160,5 @@ void setup_member() {
   runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  turn_task.restartDelayed(100); // for TEST
+  rest_task.restartDelayed(100); // for TEST
 }

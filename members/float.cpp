@@ -4,7 +4,7 @@ extern Task slowturn_task;
 extern Task rest_task;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -14,46 +14,53 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case FLOAT_WORD_TURN_TURN:
-      Serial.println("float: turn turn ");
-      fastturn_task.restartDelayed(100);
-      break;
-    default:
-      ;
-    }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-      break;
-    case MONITOR_WORD_WAKEUP:
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
       mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
+    }
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case FLOAT_WORD_TURN_TURN:
+        Serial.println("float: turn turn ");
+        fastturn_task.restartDelayed(100);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
+        if (mood != MOOD_SLEEP) mood = MOOD_LOW;
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        fastturn_task.disable();
+        slowturn_task.disable();
+        rest_task.restart();
+        break;
+      default:
+        ;
+      }
     }
   }
 }
@@ -99,7 +106,11 @@ void routine() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_THUNDER, THUNDER_WORD_RRRRR);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
+  if (mood == MOOD_SLEEP) {
+    // do nothing
+  } else {
+    mesh.sendBroadcast(msg);
+  }
   //
   routine_task.restartDelayed(random(1000*60*5, 1000*60*10));
 }
@@ -149,6 +160,5 @@ void setup_member() {
   runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  //rest_task.restartDelayed(500);
-  fastturn_task.restartDelayed(100);
+  rest_task.restartDelayed(500);
 }

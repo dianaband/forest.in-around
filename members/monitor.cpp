@@ -1,5 +1,5 @@
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // names for all the members
 String names[NUM_OF_MEMBERS] = {

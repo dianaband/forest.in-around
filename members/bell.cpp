@@ -20,7 +20,7 @@ int control_count = 0;
 extern Task servo_release_task;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -30,41 +30,47 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    message = msg.substring(8, 12).toInt();
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    switch (message) {
-    case BELL_WORD_RING_RING_RING:
-      Serial.println("bell: ring ring.");
-      hit_task.restartDelayed(100);
-      break;
-    default:
-      ;
-    }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-      break;
-    case MONITOR_WORD_WAKEUP:
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
       mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
+    }
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      message = msg.substring(8, 12).toInt();
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      switch (message) {
+      case BELL_WORD_RING_RING_RING:
+        Serial.println("bell: ring ring.");
+        hit_task.restartDelayed(100);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
+        if (mood != MOOD_SLEEP) mood = MOOD_LOW;
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        break;
+      default:
+        ;
+      }
     }
   }
 }
@@ -110,14 +116,16 @@ void routine() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d] To look: look around now!", ID_LOOK, LOOK_WORD_LOOK_AROUND);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
   //
   if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
     routine_task.restartDelayed(random(1500, 5000));
-    //routine_task.restartDelayed(1000);
   } else if (mood == MOOD_LOW) {
+    mesh.sendBroadcast(msg);
     routine_task.restartDelayed(random(5000, 20000));
-    //routine_task.restartDelayed(10000);
+  } else if (mood == MOOD_SLEEP) {
+    //do nothing
+    routine_task.restartDelayed(random(5000, 20000));
   }
 }
 Task routine_task(0, TASK_ONCE, &routine);
@@ -234,5 +242,5 @@ void setup_member() {
 
   runner.addTask(servo_release_task);
 
-  hit_task.restart();
+  // hit_task.restart();
 }

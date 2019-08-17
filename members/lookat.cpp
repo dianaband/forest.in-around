@@ -9,7 +9,7 @@ extern Task lookat_task;
 extern Task saying_greeting;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -19,46 +19,51 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case LOOK_WORD_LOOK_AROUND:
-      Serial.println("look: me to looking around?? well, but where?");
-      lookat_task.restart();
-      break;
-    default:
-      ;
-    }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-      break;
-    case MONITOR_WORD_WAKEUP:
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
       mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
+    }
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case LOOK_WORD_LOOK_AROUND:
+        Serial.println("look: me to looking around?? well, but where?");
+        lookat_task.restart();
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
+        mood = MOOD_LOW;
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        break;
+      default:
+        ;
+      }
     }
   }
 }
@@ -110,6 +115,8 @@ void routine() {
     routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
   } else if (mood == MOOD_LOW) {
     routine_task.restartDelayed(1000*60*5);
+  } else if (mood == MOOD_SLEEP) {
+    // do nothing
   }
 }
 Task routine_task(0, TASK_ONCE, &routine);

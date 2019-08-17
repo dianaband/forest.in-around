@@ -3,7 +3,7 @@ bool blow_new = false;
 extern Task blow_task;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -13,47 +13,54 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case WINDMILL_WORD_BLOW:
-      Serial.println("windmill: blow start ");
-      blow_new = true;
-      blow_task.restartDelayed(100);
-      break;
-    default:
-      ;
-    }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-      break;
-    case MONITOR_WORD_WAKEUP:
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
       mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
+    }
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case WINDMILL_WORD_BLOW:
+        Serial.println("windmill: blow start ");
+        blow_new = true;
+        blow_task.restartDelayed(100);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
+        mood = MOOD_LOW;
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        blow_task.disable();
+        digitalWrite(D6, LOW);
+        break;
+      default:
+        ;
+      }
     }
   }
 }
@@ -102,7 +109,7 @@ void bag_msg_sing() {
   //
   if (mood == MOOD_HIGH) {
     mesh.sendBroadcast(msg);
-  } else if (mood == MOOD_LOW) {
+  } else {
     // do nothing.
   }
   //
@@ -118,7 +125,11 @@ void bag_msg_handle() {
   toggle = !toggle;
   sprintf(msg_cstr, "[%06d:%03d]", ID_BAG, (toggle ? BAG_WORD_HANDLE_UP : BAG_WORD_HANDLE_DOWN));
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
+  if (mood == MOOD_SLEEP) {
+    // do nothing
+  } else {
+    mesh.sendBroadcast(msg);
+  }
   //
   bag_msg_handle_task.restartDelayed(random(1000*60*1, 1000*60*2));
 }
@@ -188,6 +199,4 @@ void setup_member() {
 
   runner.addTask(blow_task);
   runner.addTask(reaction_task);
-
-  blow_task.restartDelayed(100);
 }

@@ -19,7 +19,7 @@ extern Task sing_task;
 extern Task saying_greeting;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -29,61 +29,64 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case BAG_WORD_HANDLE_UP:
-      Serial.println("bag: s-t-a-n-d up!");
-      handle_up_task.restartDelayed(500);
-      break;
-    case BAG_WORD_HANDLE_DOWN:
-      Serial.println("bag: seat down, now!");
-      handle_down_task.restartDelayed(500);
-      break;
-    case BAG_WORD_SING:
-      Serial.println("bag: s-i-n-g, now!");
-      sing_task.restartDelayed(2000);
-      break;
-    default:
-      ;
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
+      mood = MOOD_HIGH;
     }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) {
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case BAG_WORD_HANDLE_UP:
+        Serial.println("bag: s-t-a-n-d up!");
+        handle_up_task.restartDelayed(500);
+        break;
+      case BAG_WORD_HANDLE_DOWN:
+        Serial.println("bag: seat down, now!");
+        handle_down_task.restartDelayed(500);
+        break;
+      case BAG_WORD_SING:
+        Serial.println("bag: s-i-n-g, now!");
+        sing_task.restartDelayed(2000);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
         mood = MOOD_LOW;
         // "SXXXXXXXXX" - S: S (stop)
         sprintf(cmdstr, "SXXXXXXXXX"); // stop!
         Wire.beginTransmission(I2C_ADDR);
         Wire.write(cmdstr, CMD_LENGTH);
         Wire.endTransmission();
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        break;
+      default:
+        ;
       }
-      break;
-    case MONITOR_WORD_WAKEUP:
-      mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
     }
   }
 }
@@ -129,7 +132,11 @@ void routine() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_WINDMILL, WINDMILL_WORD_BLOW);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
+  if (mood == MOOD_SLEEP) {
+    // do nothing
+  } else {
+    mesh.sendBroadcast(msg);
+  }
   //
   routine_task.restartDelayed(random(1000*60*5, 1000*60*6));
 }
@@ -203,5 +210,5 @@ void setup_member() {
   runner.addTask(reaction_task);
 
   //
-  handle_down_task.restartDelayed(500);
+  // handle_down_task.restartDelayed(500);
 }

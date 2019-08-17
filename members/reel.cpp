@@ -3,7 +3,7 @@ extern Task on_task;
 extern Task off_task;
 
 // mood
-int mood = MOOD_LOW;
+int mood = MOOD_SLEEP;
 
 // room protocol
 static int message = 0;
@@ -13,49 +13,53 @@ void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // is it for me?
-  int receipent = msg.substring(1, 7).toInt();
-  if (receipent == IDENTITY) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // i ve heard. reaction.
-    if (reaction_task.getRunCounter() == 0)
-      reaction_task.restart();
-    // so, what to do, then?
-    switch (message)
-    {
-    case REEL_WORD_PLAYTIME:
-      Serial.println("reel: play time! ");
-      on_task.restartDelayed(100);
-      break;
-    default:
-      ;
+  // am i awake?
+  if (mood == MOOD_SLEEP) {
+    // i am sleeping so, only 'wake-up!' message is meaningful to me.
+    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
+      mood = MOOD_HIGH;
     }
-  }
-  //
-  if (receipent == ID_EVERYONE) {
-    // what it says?
-    message = msg.substring(8, 12).toInt();
-    // so, what to do, then?
-    switch (message)
-    {
-    case KEYBED_WORD_FREE:
-      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-      break;
-    case KEYBED_WORD_ACTIVE:
-      if (mood != MOOD_SLEEP) {
+  } else {
+    // is it for me?
+    int receipent = msg.substring(1, 7).toInt();
+    if (receipent == IDENTITY) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // i ve heard. reaction.
+      if (reaction_task.getRunCounter() == 0)
+        reaction_task.restart();
+      // so, what to do, then?
+      switch (message)
+      {
+      case REEL_WORD_PLAYTIME:
+        Serial.println("reel: play time! ");
+        on_task.restartDelayed(100);
+        break;
+      default:
+        ;
+      }
+    }
+    //
+    if (receipent == ID_EVERYONE) {
+      // what it says?
+      message = msg.substring(8, 12).toInt();
+      // so, what to do, then?
+      switch (message)
+      {
+      case KEYBED_WORD_FREE:
+        mood = MOOD_HIGH;
+        break;
+      case KEYBED_WORD_ACTIVE:
         mood = MOOD_LOW;
         off_task.restartDelayed(100);
+        break;
+      case MONITOR_WORD_SLEEP:
+        mood = MOOD_SLEEP;
+        off_task.restartDelayed(100);
+        break;
+      default:
+        ;
       }
-      break;
-    case MONITOR_WORD_WAKEUP:
-      mood = MOOD_HIGH;
-      break;
-    case MONITOR_WORD_SLEEP:
-      mood = MOOD_SLEEP;
-      break;
-    default:
-      ;
     }
   }
 }
@@ -104,7 +108,7 @@ void peak_msg_ppippi() {
   //
   if (mood == MOOD_HIGH) {
     mesh.sendBroadcast(msg);
-  } else if (mood == MOOD_LOW) {
+  } else {
     // do nothing
   }
   //
@@ -144,5 +148,4 @@ void setup_member() {
   runner.addTask(reaction_task);
 
   off_task.restartDelayed(100);
-  // on_task.restartDelayed(100);
 }
