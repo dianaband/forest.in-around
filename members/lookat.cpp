@@ -88,7 +88,11 @@ Task reaction_task(10, 17, &reaction);
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], LOOK_WORD_HELLO); //"Me? I do look at you!"
+  if (mood == MOOD_SLEEP) {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], LOOK_WORD_SLEEPING); //"zzzzzzzz"
+  } else {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], LOOK_WORD_HELLO); //"Me? I do look at you!"
+  }
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }

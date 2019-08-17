@@ -186,22 +186,22 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
         }
       }
       break;
-    // case FUR_WORD_HELLO:
-    //   for (int idx = 0; idx < NUM_OF_MEMBERS; idx++) {
-    //     if (memberList[idx] == ID_FUR) {
-    //       presence[idx] = 10; // 1 greeting per every 10 seconds expected. (1 fps)
-    //       awakeness[idx] = 1; // it's awake.
-    //     }
-    //   }
-    //   break;
-    // case FUR_WORD_SLEEPING:
-    //   for (int idx = 0; idx < NUM_OF_MEMBERS; idx++) {
-    //     if (memberList[idx] == ID_FUR) {
-    //       presence[idx] = 10; // 1 greeting per every 10 seconds expected. (1 fps)
-    //       awakeness[idx] = 0; // it's sleeping
-    //     }
-    //   }
-    //   break;
+    case FUR_WORD_HELLO:
+      for (int idx = 0; idx < NUM_OF_MEMBERS; idx++) {
+        if (memberList[idx] == ID_FUR) {
+          presence[idx] = 10; // 1 greeting per every 10 seconds expected. (1 fps)
+          awakeness[idx] = 1; // it's awake.
+        }
+      }
+      break;
+    case FUR_WORD_SLEEPING:
+      for (int idx = 0; idx < NUM_OF_MEMBERS; idx++) {
+        if (memberList[idx] == ID_FUR) {
+          presence[idx] = 10; // 1 greeting per every 10 seconds expected. (1 fps)
+          awakeness[idx] = 0; // it's sleeping
+        }
+      }
+      break;
     case PEAK_WORD_HELLO:
       for (int idx = 0; idx < NUM_OF_MEMBERS; idx++) {
         if (memberList[idx] == ID_PEAK) {
