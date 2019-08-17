@@ -64,15 +64,17 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     switch (message)
     {
     case KEYBED_WORD_FREE:
-      mood = MOOD_HIGH;
+      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
       break;
     case KEYBED_WORD_ACTIVE:
-      mood = MOOD_LOW;
-      // "SXXXXXXXXX" - S: S (stop)
-      sprintf(cmdstr, "SXXXXXXXXX"); // stop!
-      Wire.beginTransmission(I2C_ADDR);
-      Wire.write(cmdstr, CMD_LENGTH);
-      Wire.endTransmission();
+      if (mood != MOOD_SLEEP) {
+        mood = MOOD_LOW;
+        // "SXXXXXXXXX" - S: S (stop)
+        sprintf(cmdstr, "SXXXXXXXXX"); // stop!
+        Wire.beginTransmission(I2C_ADDR);
+        Wire.write(cmdstr, CMD_LENGTH);
+        Wire.endTransmission();
+      }
       break;
     case MONITOR_WORD_WAKEUP:
       mood = MOOD_HIGH;

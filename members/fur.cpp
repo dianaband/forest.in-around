@@ -46,10 +46,16 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     switch (message)
     {
     case KEYBED_WORD_FREE:
-      mood = MOOD_HIGH;
+      if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
       break;
     case KEYBED_WORD_ACTIVE:
-      mood = MOOD_LOW;
+      if (mood != MOOD_SLEEP) mood = MOOD_LOW;
+      break;
+    case MONITOR_WORD_WAKEUP:
+      mood = MOOD_HIGH;
+      break;
+    case MONITOR_WORD_SLEEP:
+      mood = MOOD_SLEEP;
       break;
     default:
       ;
