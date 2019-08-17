@@ -74,6 +74,12 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
       Wire.write(cmdstr, CMD_LENGTH);
       Wire.endTransmission();
       break;
+    case MONITOR_WORD_WAKEUP:
+      mood = MOOD_HIGH;
+      break;
+    case MONITOR_WORD_SLEEP:
+      mood = MOOD_SLEEP;
+      break;
     default:
       ;
     }
@@ -105,7 +111,11 @@ Task reaction_task(10, 17, &reaction);
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], BAG_WORD_HELLO); //"Sir! 9 of the 10!"
+  if (mood == MOOD_SLEEP) {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], BAG_WORD_SLEEPING); //"zzzzzzzzzzzzzzzz"
+  } else {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], BAG_WORD_HELLO); //"Sir! 9 of the 10!"
+  }
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }

@@ -14,11 +14,11 @@
 #define ID_PEAK          (0x1D00 + 0xC0)
 #define ID_KEYBED        (0x1D00 + 0xD0)
 // (special agent)
-#define ID_MONITOR     (0x1E00 + 0x10)
+#define ID_MONITOR       (0x1E00 + 0x10)
 // (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
 // (choice)
-#define IDENTITY         ID_MONITOR
+#define IDENTITY         ID_BAG
 
 #define NUM_OF_MEMBERS 13
 int memberList[NUM_OF_MEMBERS] = {
@@ -50,6 +50,7 @@ extern painlessMesh mesh;
 // mood
 #define MOOD_LOW            (0x300D0001)
 #define MOOD_HIGH           (0x300D0002)
+#define MOOD_SLEEP          (0x300D0003)
 
 // firmata connectivity
 #define FIRMATA_ON          (0xF13A0001)
@@ -71,10 +72,13 @@ extern painlessMesh mesh;
 
 // board
 #define BOARD_NODEMCU_ESP12E (0xBD00 + 1)
-#define BOARD_NODEMCU_ESP12N (0xBD00 + 2)
-#define BOARD_NODEMCU_ESP32  (0xBD00 + 3)
+#define BOARD_NODEMCU_ESP32  (0xBD00 + 2)
 //(choice)
 #define BOARD_SELECT BOARD_NODEMCU_ESP12E
+#if (IDENTITY == ID_MONITOR)
+#undef BOARD_SELECT
+#define BOARD_SELECT         BOARD_NODEMCU_ESP32
+#endif
 
 // mesh
 #define MESH_SSID "darker-than-the-navel"

@@ -115,7 +115,11 @@ void nothappyalone() {
       // okay. i m fed up. bye the world.
       Serial.println("okay. i m fed up. bye the world.");
       Serial.println();
+#if (BOARD_SELECT == BOARD_NODEMCU_ESP12E)
       ESP.reset();
+#elif (BOARD_SELECT == BOARD_NODEMCU_ESP32)
+      ESP.restart(); // esp32 doesn't support 'reset()' yet... (restart() is framework-supported, reset() is more forced hardware-reset-action)
+#endif
     }
   }
   //

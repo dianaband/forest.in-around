@@ -42,3 +42,5 @@
 members/*/.pioenvs/*
 members/*/.piolibdeps/*
 .travis.yml
+.pio/*
+members/*/.pio/*
