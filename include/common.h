@@ -18,7 +18,7 @@
 // (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
 // (choice)
-#define IDENTITY         ID_WINDMILL
+#define IDENTITY         ID_KEYBED
 
 #define NUM_OF_MEMBERS 13
 int memberList[NUM_OF_MEMBERS] = {

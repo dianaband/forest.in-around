@@ -62,9 +62,9 @@ void analogWriteCallback(byte pin, int value){
 void greeting() {
   static String msg = "";
   if (mood == MOOD_SLEEP) {
-    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_HELLO); //"alien's terminal is me. ::)"
-  } else {
     sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_SLEEPING); //"alien's zzzzzzzzzzzzzzzz. ::)"
+  } else {
+    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], KEYBED_WORD_HELLO); //"alien's terminal is me. ::)"
   }
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
