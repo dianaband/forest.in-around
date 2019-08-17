@@ -120,11 +120,12 @@ void routine() {
   msg = String(msg_cstr);
   if (mood == MOOD_SLEEP) {
     // do nothing
+    routine_task.restartDelayed(1000*60*1);
   } else {
     mesh.sendBroadcast(msg);
+    routine_task.restartDelayed(random(1000*60*2, 1000*60*3));
   }
   //
-  routine_task.restartDelayed(random(1000*60*2, 1000*60*3));
 }
 Task routine_task(0, TASK_ONCE, &routine);
 

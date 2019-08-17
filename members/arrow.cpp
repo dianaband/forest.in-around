@@ -119,7 +119,7 @@ void routine() {
     routine_task.restartDelayed(1000*60*5);
   } else if (mood == MOOD_SLEEP) {
     // do nothing
-    routine_task.restartDelayed(1000*60*5);
+    routine_task.restartDelayed(1000*60*1);
   }
 }
 Task routine_task(0, TASK_ONCE, &routine);

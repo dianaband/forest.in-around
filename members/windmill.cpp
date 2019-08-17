@@ -127,11 +127,12 @@ void bag_msg_handle() {
   msg = String(msg_cstr);
   if (mood == MOOD_SLEEP) {
     // do nothing
+    bag_msg_handle_task.restartDelayed(1000*60*1);
   } else {
     mesh.sendBroadcast(msg);
+    bag_msg_handle_task.restartDelayed(random(1000*60*1, 1000*60*2));
   }
   //
-  bag_msg_handle_task.restartDelayed(random(1000*60*1, 1000*60*2));
 }
 Task bag_msg_handle_task(0, TASK_ONCE, &bag_msg_handle);
 

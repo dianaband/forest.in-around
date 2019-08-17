@@ -109,14 +109,17 @@ void routine() {
   static String msg = "";
   sprintf(msg_cstr, "[%06d:%03d]", ID_BELL, BELL_WORD_RING_RING_RING);
   msg = String(msg_cstr);
-  mesh.sendBroadcast(msg);
+
   //
   if (mood == MOOD_HIGH) {
+    mesh.sendBroadcast(msg);
     routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
   } else if (mood == MOOD_LOW) {
+    mesh.sendBroadcast(msg);
     routine_task.restartDelayed(1000*60*5);
   } else if (mood == MOOD_SLEEP) {
     // do nothing
+    routine_task.restartDelayed(1000*60*1);
   }
 }
 Task routine_task(0, TASK_ONCE, &routine);
