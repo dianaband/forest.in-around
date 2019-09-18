@@ -16,7 +16,7 @@
 #define ID_ANI1          (0x1D00 + 0xE0)
 #define ID_ANI2          (0x1D00 + 0xF0)
 // (special agent)
-#define ID_MONITOR        (0x1E00 + 0x10)
+#define ID_MONITOR       (0x1E00 + 0x10)
 // (groups)
 #define ID_EVERYONE      (0x1F00 + 0x00)
 // (choice)
@@ -68,7 +68,9 @@ extern painlessMesh mesh;
 //NOTE: disabling AP beacon for speaker accompanied devices!
 #define NODE_TYPE_AP_STA    (0x40DE0001)
 #define NODE_TYPE_STA_ONLY  (0x40DE0002)
+//by-default : STA_ONLY
 #define NODE_TYPE           NODE_TYPE_STA_ONLY
+//guys w/o speakers : AP_STA
 #if (IDENTITY == ID_GAS || IDENTITY == ID_LOOK || IDENTITY == ID_MONITOR)
 #undef NODE_TYPE
 #define NODE_TYPE           NODE_TYPE_AP_STA

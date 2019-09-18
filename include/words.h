@@ -68,7 +68,7 @@
 #define ANI2_WORD_SLEEPING         (ID_ANI2 + 0x01)
 #define ANI2_WORD_SING             (ID_ANI2 + 0x02)
 
-#define KEYBED_WORD_HELLO            (ID_KEYBED + 0x00)
-#define KEYBED_WORD_SLEEPING         (ID_KEYBED + 0x01)
-#define KEYBED_WORD_ACTIVE           (ID_KEYBED + 0x02)
-#define KEYBED_WORD_FREE             (ID_KEYBED + 0x03)
+#define KEYBED_WORD_HELLO          (ID_KEYBED + 0x00)
+#define KEYBED_WORD_SLEEPING       (ID_KEYBED + 0x01)
+#define KEYBED_WORD_ACTIVE         (ID_KEYBED + 0x02)
+#define KEYBED_WORD_FREE           (ID_KEYBED + 0x03)
