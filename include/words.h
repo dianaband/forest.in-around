@@ -36,48 +36,34 @@
 #define CONDUCTOR_WORD_HELLO         (ID_MONITOR + 0x00)
 
 //actors
-#define GAS_WORD_HELLO              (ID_GAS + 0x00)
-#define GAS_WORD_RING_RING_RING     (ID_GAS + 0x01)
+#define GAS_WORD_HELLO             (ID_GAS + 0x00)
+#define GAS_WORD_SLEEPING          (ID_GAS + 0x01)
+#define GAS_WORD_RING_RING_RING    (ID_GAS + 0x02)
 
-#define FLOAT_WORD_HELLO             (ID_FLOAT + 0x00)
-#define FLOAT_WORD_TURN_TURN         (ID_FLOAT + 0x01)
+#define VOICE1_WORD_HELLO          (ID_VOICE1 + 0x00)
+#define VOICE1_WORD_SLEEPING       (ID_VOICE1 + 0x01)
+#define VOICE1_WORD_SING           (ID_VOICE1 + 0x02)
 
-#define VOICE1_WORD_HELLO             (ID_VOICE1 + 0x00)
-#define VOICE1_WORD_HANDLE_UP         (ID_VOICE1 + 0x01)
-#define VOICE1_WORD_HANDLE_DOWN       (ID_VOICE1 + 0x02)
-#define VOICE1_WORD_SING              (ID_VOICE1 + 0x03)
+#define VOICE2_WORD_HELLO          (ID_VOICE2 + 0x00)
+#define VOICE2_WORD_SLEEPING       (ID_VOICE2 + 0x01)
+#define VOICE2_WORD_SING           (ID_VOICE2 + 0x02)
 
-#define LOOK_WORD_HELLO              (ID_LOOK + 0x00)
-#define LOOK_WORD_LOOK_AROUND        (ID_LOOK + 0x01)
+#define VOICE3_WORD_HELLO          (ID_VOICE3 + 0x00)
+#define VOICE3_WORD_SLEEPING       (ID_VOICE3 + 0x01)
+#define VOICE3_WORD_SING           (ID_VOICE3 + 0x02)
 
-#define VOICE2_WORD_HELLO            (ID_VOICE2 + 0x00)
-#define VOICE2_WORD_SING             (ID_VOICE2 + 0x01)
+#define FALL1_WORD_HELLO           (ID_FALL1 + 0x00)
+#define FALL1_WORD_SLEEPING        (ID_FALL1 + 0x01)
+#define FALL1_WORD_SING            (ID_FALL1 + 0x02)
 
-#define GLASS_WORD_HELLO             (ID_GLASS + 0x00)
-#define GLASS_WORD_PLAYTIME          (ID_GLASS + 0x01)
-
-#define FALL2_WORD_HELLO             (ID_FALL2 + 0x00)
-#define FALL2_WORD_SING              (ID_FALL2 + 0x01)
-
-#define ARROW_WORD_HELLO             (ID_ARROW + 0x00)
-#define ARROW_WORD_CHANGE            (ID_ARROW + 0x01)
-
-#define THUNDER_WORD_HELLO           (ID_THUNDER + 0x00)
-#define THUNDER_WORD_RRRRR           (ID_THUNDER + 0x01)
-#define THUNDER_WORD_LEFT            (ID_THUNDER + 0x02)
-
-#define FALL1_WORD_HELLO             (ID_FALL1 + 0x00)
-#define FALL1_WORD_SING              (ID_FALL1 + 0x01)
-
-#define VOICE3_WORD_HELLO            (ID_VOICE3 + 0x00)
-#define VOICE3_WORD_SING             (ID_VOICE3 + 0x01)
-
-#define KEYBED_WORD_HELLO            (ID_KEYBED + 0x00)
-#define KEYBED_WORD_ACTIVE           (ID_KEYBED + 0x01)
-#define KEYBED_WORD_FREE             (ID_KEYBED + 0x02)
+#define FALL2_WORD_HELLO           (ID_FALL2 + 0x00)
+#define FALL2_WORD_SLEEPING        (ID_FALL2 + 0x01)
+#define FALL2_WORD_SING            (ID_FALL2 + 0x02)
 
 #define ANI1_WORD_HELLO            (ID_ANI1 + 0x00)
-#define ANI1_WORD_SING             (ID_ANI1 + 0x01)
+#define ANI1_WORD_SLEEPING         (ID_ANI1 + 0x01)
+#define ANI1_WORD_SING             (ID_ANI1 + 0x02)
 
 #define ANI2_WORD_HELLO            (ID_ANI2 + 0x00)
-#define ANI2_WORD_SING             (ID_ANI2 + 0x01)
+#define ANI2_WORD_SLEEPING         (ID_ANI2 + 0x01)
+#define ANI2_WORD_SING             (ID_ANI2 + 0x02)
