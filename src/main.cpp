@@ -15,44 +15,35 @@
 #elif (IDENTITY == ID_GAS)
 #include "../members/gas.cpp"
 //
+#elif (IDENTITY == ID_TRUNK)
+#include "../members/trunk.cpp"
+//
+#elif (IDENTITY == ID_DRUM)
+#include "../members/drum.cpp"
+//
 #elif (IDENTITY == ID_FLOAT)
 #include "../members/float.cpp"
 //
-#elif (IDENTITY == ID_VOICE1)
-#include "../members/voice1.cpp"
+#elif (IDENTITY == ID_REEL)
+#include "../members/reel.cpp"
 //
-#elif (IDENTITY == ID_LOOK)
-#include "../members/lookat.cpp"
+#elif (IDENTITY == ID_SPEAK_A)
+#include "../members/speaker_a.cpp"
 //
-#elif (IDENTITY == ID_FALL1)
-#include "../members/fall1.cpp"
+#elif (IDENTITY == ID_SPEAK_B)
+#include "../members/speaker_b.cpp"
 //
-#elif (IDENTITY == ID_GLASS)
-#include "../members/glass.cpp"
+#elif (IDENTITY == ID_SPEAK_C)
+#include "../members/speaker_c.cpp"
 //
-#elif (IDENTITY == ID_FALL2)
-#include "../members/fall2.cpp"
+#elif (IDENTITY == ID_SPEAK_D)
+#include "../members/speaker_d.cpp"
 //
-#elif (IDENTITY == ID_ARROW)
-#include "../members/arrow.cpp"
+#elif (IDENTITY == ID_SPEAK_E)
+#include "../members/speaker_e.cpp"
 //
-#elif (IDENTITY == ID_THUNDER)
-#include "../members/thunder.cpp"
-//
-#elif (IDENTITY == ID_VOICE2)
-#include "../members/voice2.cpp"
-//
-#elif (IDENTITY == ID_VOICE3)
-#include "../members/voice3.cpp"
-//
-#elif (IDENTITY == ID_KEYBED)
-#include "../members/keybed.cpp"
-//
-#elif (IDENTITY == ID_ANI1)
-#include "../members/ani1.cpp"
-//
-#elif (IDENTITY == ID_ANI2)
-#include "../members/ani2.cpp"
+#elif (IDENTITY == ID_SPEAK_F)
+#include "../members/speaker_f.cpp"
 //
 #endif
 
@@ -210,7 +201,7 @@ void setup() {
   delay(100);
   Serial.println("setup done.");
   Serial.print("IDENTITY: ");
-  Serial.println(IDENTITY, HEX);
+  Serial.println(IDENTITY);
 #if (NODE_TYPE == NODE_TYPE_STA_ONLY)
   Serial.println("INFO: we are in the WIFI_STA mode!");
 #endif

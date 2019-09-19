@@ -1,45 +1,51 @@
 #pragma once
 
+//
+// [ room protocol (message format) ]
+//
+// DDDDD ==> 5 decimal-digits.
+// IIIWW ==> id (3 decimal-digits) * 100 + word (2 decimal-digits)
+// id ==> 100~ : objects
+// id ==> 200~ : agents (controller)
+// id ==> 900~ : groups
+// words ==> 1 ~ 99 ==> see 'words.h' for the details
+
 // member identity
-#define ID_GAS           (0x1D00 + 0x20)
-#define ID_FLOAT         (0x1D00 + 0x30)
-#define ID_VOICE1        (0x1D00 + 0x40)
-#define ID_LOOK          (0x1D00 + 0x50)
-#define ID_VOICE2        (0x1D00 + 0x60)
-#define ID_GLASS         (0x1D00 + 0x70)
-#define ID_FALL2         (0x1D00 + 0x80)
-#define ID_ARROW         (0x1D00 + 0x90)
-#define ID_THUNDER       (0x1D00 + 0xA0)
-#define ID_FALL1         (0x1D00 + 0xB0)
-#define ID_VOICE3        (0x1D00 + 0xC0)
-#define ID_KEYBED        (0x1D00 + 0xD0)
-#define ID_ANI1          (0x1D00 + 0xE0)
-#define ID_ANI2          (0x1D00 + 0xF0)
+// objects
+#define ID_GAS           (10100)
+#define ID_TRUNK         (10200)
+#define ID_DRUM          (10300)
+#define ID_REEL          (10400)
+#define ID_FLOAT         (10500)
+// speakers
+#define ID_SPEAK_A       (10600)
+#define ID_SPEAK_B       (10700)
+#define ID_SPEAK_C       (10800)
+#define ID_SPEAK_D       (10900)
+#define ID_SPEAK_E       (11000)
+#define ID_SPEAK_F       (11100)
 // (special agent)
-#define ID_MONITOR       (0x1E00 + 0x10)
+#define ID_MONITOR       (20100)
 // (groups)
-#define ID_EVERYONE      (0x1F00 + 0x00)
+#define ID_EVERYONE      (90100)
+#define ID_SPEAKERS      (90200)
 // (choice)
-#define IDENTITY         ID_ANI1
+#define IDENTITY         ID_REEL
 
-
-#define NUM_OF_MEMBERS 15
+#define NUM_OF_MEMBERS 12
 int memberList[NUM_OF_MEMBERS] = {
   ID_GAS, // 1
-  ID_FLOAT, // 2
-  ID_VOICE1, // 3
-  ID_LOOK, // 4
-  ID_VOICE2, // 5
-  ID_GLASS, // 6
-  ID_FALL2, // 7
-  ID_ARROW, // 8
-  ID_THUNDER, // 9
-  ID_FALL1, // 10
-  ID_VOICE3, // 11
-  ID_KEYBED, // 12
-  ID_MONITOR, // 13
-  ID_ANI1, // 14
-  ID_ANI2 // 15
+  ID_TRUNK, // 2
+  ID_DRUM, // 3
+  ID_REEL, // 4
+  ID_FLOAT, // 5
+  ID_SPEAK_A, // 6
+  ID_SPEAK_B, // 7
+  ID_SPEAK_C, // 8
+  ID_SPEAK_D, // 9
+  ID_SPEAK_E, // 10
+  ID_SPEAK_F, // 11
+  ID_MONITOR // 12
 };
 
 //
@@ -51,10 +57,6 @@ int memberList[NUM_OF_MEMBERS] = {
 //
 #include <painlessMesh.h>
 extern painlessMesh mesh;
-
-// mood
-#define MOOD_LOW            (0x300D0001)
-#define MOOD_HIGH           (0x300D0002)
 
 // firmata connectivity
 #define FIRMATA_ON          (0xF13A0001)
@@ -71,7 +73,7 @@ extern painlessMesh mesh;
 //by-default : STA_ONLY
 #define NODE_TYPE           NODE_TYPE_STA_ONLY
 //guys w/o speakers : AP_STA
-#if (IDENTITY == ID_GAS || IDENTITY == ID_LOOK || IDENTITY == ID_MONITOR)
+#if (IDENTITY == ID_GAS || IDENTITY == ID_DRUM || IDENTITY == ID_REEL || IDENTITY == ID_FLOAT || IDENTITY == ID_MONITOR)
 #undef NODE_TYPE
 #define NODE_TYPE           NODE_TYPE_AP_STA
 #endif
@@ -84,8 +86,8 @@ extern painlessMesh mesh;
 #define BOARD_SELECT BOARD_NODEMCU_ESP12E
 
 // mesh
-#define MESH_SSID "darker-than-the-navel"
-#define MESH_PASSWORD "12*1000/128"
+#define MESH_SSID "li_li_li_li_li_li"
+#define MESH_PASSWORD "11*1111/111"
 #define MESH_PORT 5555
 #define MESH_CHANNEL 5
 // #define MESH_ANCHOR
@@ -104,8 +106,8 @@ extern painlessMesh mesh;
 #elif (BOARD_SELECT == BOARD_NODEMCU_ESP32)
 #define LED_PIN 13 // featheresp32
 #endif
-#define LED_PERIOD (1000+(12*1000/128))
-#define LED_ONTIME (12*1000/128)
+#define LED_PERIOD (1111)
+#define LED_ONTIME (0) //(1)
 
 // event handlers fo connection-related events
 extern void gotMessageCallback(uint32_t from, String & msg); // REQUIRED

@@ -1,74 +1,98 @@
 #define MSG_LENGTH_MAX 256
 
-//room events
+//for group (everyone)
+#define EVERYONE_MOOD_HIGH    (ID_EVERYONE + 1)
+#define EVERYONE_MOOD_LOW     (ID_EVERYONE + 2)
 
-// #1 ==> 369
-#define ROOM_EVT369_ID               (ID_EVERYONE + 0x10)
-//
-#define ROOM_EVT369_CALL             (ROOM_EVT369_ID + 0x01) // wanna play 369?
-#define ROOM_EVT369_RESPONSE_Y       (ROOM_EVT369_ID + 0x02) // good. i'm in.
-#define ROOM_EVT369_RESPONSE_N       (ROOM_EVT369_ID + 0x03) // no, pass. i'm out.
-//only for those did say gonna do this.
-#define ROOM_EVT369_FASTER           (ROOM_EVT369_ID + 0x04) // let's make it faster
-#define ROOM_EVT369_SLOWER           (ROOM_EVT369_ID + 0x05) // let's slow down, no?
-#define ROOM_EVT369_DIED             (ROOM_EVT369_ID + 0x06) // oh. i'm dead. game over. well. was boring, again.
-
-// #2 ==> baseball guess
-#define ROOM_EVTBBG_ID               (ID_EVERYONE + 0x20)
-//
-#define ROOM_EVTBBG_CALL                 (ROOM_EVTBBG_ID + 0x01) // wanna play baseball guess?
-#define ROOM_EVTBBG_RESPONSE_Y           (ROOM_EVTBBG_ID + 0x02) // good. i'm in.
-#define ROOM_EVTBBG_RESPONSE_N           (ROOM_EVTBBG_ID + 0x03) // no, pass. i'm out.
-//only for those did say gonna do this.
-#define ROOM_EVTBBG_DECLARE_PROB_GIVER   (ROOM_EVTBBG_ID + 0x04) // i wanna do prob. giver.
-#define ROOM_EVTBBG_DECLARE_PROB_SOLVER  (ROOM_EVTBBG_ID + 0x05) // i wanna do prob. solver.
-#define ROOM_EVTBBG_THE_SOLUTION         (ROOM_EVTBBG_ID + 0x06) // i will try to solve! the answer is...
-#define ROOM_EVTBBG_CORRECT              (ROOM_EVTBBG_ID + 0x07) // wow that was fast.
-#define ROOM_EVTBBG_INCORRECT            (ROOM_EVTBBG_ID + 0x08) // sorry, but that is not the right one. ;)
-
-// #3 ==> room escape game
-
-
-
-//individual events
-
-//announcements
-#define CONDUCTOR_WORD_HELLO         (ID_MONITOR + 0x00)
+//monitor & conductor
+#define MONITOR_HELLO         (ID_MONITOR + 1)
+#define MONITOR_WAKEUP        (ID_MONITOR + 2)
+#define MONITOR_SLEEP         (ID_MONITOR + 3)
 
 //actors
-#define GAS_WORD_HELLO             (ID_GAS + 0x00)
-#define GAS_WORD_SLEEPING          (ID_GAS + 0x01)
-#define GAS_WORD_RING_RING_RING    (ID_GAS + 0x02)
+#define GAS_HELLO             (ID_GAS + 1)
+#define GAS_SLEEPING          (ID_GAS + 2)
+#define GAS_RING_RING_RING    (ID_GAS + 3)
 
-#define VOICE1_WORD_HELLO          (ID_VOICE1 + 0x00)
-#define VOICE1_WORD_SLEEPING       (ID_VOICE1 + 0x01)
-#define VOICE1_WORD_SING           (ID_VOICE1 + 0x02)
+#define TRUNK_HELLO           (ID_TRUNK + 1)
+#define TRUNK_SLEEPING        (ID_TRUNK + 2)
+#define TRUNK_SING            (ID_TRUNK + 3)
 
-#define VOICE2_WORD_HELLO          (ID_VOICE2 + 0x00)
-#define VOICE2_WORD_SLEEPING       (ID_VOICE2 + 0x01)
-#define VOICE2_WORD_SING           (ID_VOICE2 + 0x02)
+#define DRUM_HELLO            (ID_DRUM + 1)
+#define DRUM_SLEEPING         (ID_DRUM + 2)
+#define DRUM_TOMTOM           (ID_DRUM + 3)
 
-#define VOICE3_WORD_HELLO          (ID_VOICE3 + 0x00)
-#define VOICE3_WORD_SLEEPING       (ID_VOICE3 + 0x01)
-#define VOICE3_WORD_SING           (ID_VOICE3 + 0x02)
+#define FLOAT_HELLO           (ID_FLOAT + 1)
+#define FLOAT_SLEEPING        (ID_FLOAT + 2)
+#define FLOAT_FLY             (ID_FLOAT + 3)
 
-#define FALL1_WORD_HELLO           (ID_FALL1 + 0x00)
-#define FALL1_WORD_SLEEPING        (ID_FALL1 + 0x01)
-#define FALL1_WORD_SING            (ID_FALL1 + 0x02)
+#define REEL_HELLO            (ID_REEL + 1)
+#define REEL_SLEEPING         (ID_REEL + 2)
+#define REEL_TURN             (ID_REEL + 3)
 
-#define FALL2_WORD_HELLO           (ID_FALL2 + 0x00)
-#define FALL2_WORD_SLEEPING        (ID_FALL2 + 0x01)
-#define FALL2_WORD_SING            (ID_FALL2 + 0x02)
+#define SPEAK_A_HELLO         (ID_SPEAK_A + 1)
+#define SPEAK_A_SLEEPING      (ID_SPEAK_A + 2)
+#define SPEAK_A_TIC           (ID_SPEAK_A + 3)
+#define SPEAK_A_TAC           (ID_SPEAK_A + 4)
+#define SPEAK_A_TOE           (ID_SPEAK_A + 5)
+#define SPEAK_A_SET_PINGPONG  (ID_SPEAK_A + 6)
+#define SPEAK_A_SET_VOICES    (ID_SPEAK_A + 7)
+#define SPEAK_A_SET_NATURE    (ID_SPEAK_A + 8)
 
-#define ANI1_WORD_HELLO            (ID_ANI1 + 0x00)
-#define ANI1_WORD_SLEEPING         (ID_ANI1 + 0x01)
-#define ANI1_WORD_SING             (ID_ANI1 + 0x02)
+#define SPEAK_B_HELLO         (ID_SPEAK_B + 1)
+#define SPEAK_B_SLEEPING      (ID_SPEAK_B + 2)
+#define SPEAK_B_TIC           (ID_SPEAK_B + 3)
+#define SPEAK_B_TAC           (ID_SPEAK_B + 4)
+#define SPEAK_B_TOE           (ID_SPEAK_B + 5)
+#define SPEAK_B_SET_PINGPONG  (ID_SPEAK_B + 6)
+#define SPEAK_B_SET_VOICES    (ID_SPEAK_B + 7)
+#define SPEAK_B_SET_NATURE    (ID_SPEAK_B + 8)
 
-#define ANI2_WORD_HELLO            (ID_ANI2 + 0x00)
-#define ANI2_WORD_SLEEPING         (ID_ANI2 + 0x01)
-#define ANI2_WORD_SING             (ID_ANI2 + 0x02)
+#define SPEAK_C_HELLO         (ID_SPEAK_C + 1)
+#define SPEAK_C_SLEEPING      (ID_SPEAK_C + 2)
+#define SPEAK_C_TIC           (ID_SPEAK_C + 3)
+#define SPEAK_C_TAC           (ID_SPEAK_C + 4)
+#define SPEAK_C_TOE           (ID_SPEAK_C + 5)
+#define SPEAK_C_SET_PINGPONG  (ID_SPEAK_C + 6)
+#define SPEAK_C_SET_VOICES    (ID_SPEAK_C + 7)
+#define SPEAK_C_SET_NATURE    (ID_SPEAK_C + 8)
 
-#define KEYBED_WORD_HELLO          (ID_KEYBED + 0x00)
-#define KEYBED_WORD_SLEEPING       (ID_KEYBED + 0x01)
-#define KEYBED_WORD_ACTIVE         (ID_KEYBED + 0x02)
-#define KEYBED_WORD_FREE           (ID_KEYBED + 0x03)
+#define SPEAK_D_HELLO         (ID_SPEAK_D + 1)
+#define SPEAK_D_SLEEPING      (ID_SPEAK_D + 2)
+#define SPEAK_D_TIC           (ID_SPEAK_D + 3)
+#define SPEAK_D_TAC           (ID_SPEAK_D + 4)
+#define SPEAK_D_TOE           (ID_SPEAK_D + 5)
+#define SPEAK_D_SET_PINGPONG  (ID_SPEAK_D + 6)
+#define SPEAK_D_SET_VOICES    (ID_SPEAK_D + 7)
+#define SPEAK_D_SET_NATURE    (ID_SPEAK_D + 8)
+
+#define SPEAK_E_HELLO         (ID_SPEAK_E + 1)
+#define SPEAK_E_SLEEPING      (ID_SPEAK_E + 2)
+#define SPEAK_E_TIC           (ID_SPEAK_E + 3)
+#define SPEAK_E_TAC           (ID_SPEAK_E + 4)
+#define SPEAK_E_TOE           (ID_SPEAK_E + 5)
+#define SPEAK_E_SET_PINGPONG  (ID_SPEAK_E + 6)
+#define SPEAK_E_SET_VOICES    (ID_SPEAK_E + 7)
+#define SPEAK_E_SET_NATURE    (ID_SPEAK_E + 8)
+
+#define SPEAK_F_HELLO         (ID_SPEAK_F + 1)
+#define SPEAK_F_SLEEPING      (ID_SPEAK_F + 2)
+#define SPEAK_F_TIC           (ID_SPEAK_F + 3)
+#define SPEAK_F_TAC           (ID_SPEAK_F + 4)
+#define SPEAK_F_TOE           (ID_SPEAK_F + 5)
+#define SPEAK_F_SET_PINGPONG  (ID_SPEAK_F + 6)
+#define SPEAK_F_SET_VOICES    (ID_SPEAK_F + 7)
+#define SPEAK_F_SET_NATURE    (ID_SPEAK_F + 8)
+
+//for group (all speakers)
+#define SPEAKERS_HELLO        (ID_SPEAKERS + 1)
+#define SPEAKERS_SLEEPING     (ID_SPEAKERS + 2)
+#define SPEAKERS_TIC          (ID_SPEAKERS + 3)
+#define SPEAKERS_TAC          (ID_SPEAKERS + 4)
+#define SPEAKERS_TOE          (ID_SPEAKERS + 5)
+#define SPEAKERS_SET_PINGPONG (ID_SPEAKERS + 6)
+#define SPEAKERS_SET_VOICES   (ID_SPEAKERS + 7)
+#define SPEAKERS_SET_NATURE   (ID_SPEAKERS + 8)
+//status: leading (speakers)
+#define SPEAKERS_LEADING      (ID_SPEAKERS + 80)
+#define SPEAKERS_FOLLOWING    (ID_SPEAKERS + 81)
