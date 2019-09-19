@@ -107,7 +107,7 @@ extern painlessMesh mesh;
 #define LED_PIN 13 // featheresp32
 #endif
 #define LED_PERIOD (1111)
-#define LED_ONTIME (0) //(1)
+#define LED_ONTIME (1)
 
 // event handlers fo connection-related events
 extern void gotMessageCallback(uint32_t from, String & msg); // REQUIRED
