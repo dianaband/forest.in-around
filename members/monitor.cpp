@@ -302,6 +302,7 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
 // Task loop_touch_task(100, TASK_FOREVER, &loop_touch); // touch sensing --> 0.1s
 
 //msg_reel task
+extern Task loop_msg_reel_task;
 void loop_msg_reel() {
   //
   static String msg = "";
@@ -309,8 +310,24 @@ void loop_msg_reel() {
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
   Serial.println("TX : " + msg);
+  //
+  loop_msg_reel_task.restartDelayed(random(1000*60*2, 1000*60*2.5));
 }
-Task loop_msg_reel_task(10000, TASK_FOREVER, &loop_msg_reel); // touch sensing --> 0.1s
+Task loop_msg_reel_task(0, TASK_ONCE, &loop_msg_reel);
+
+//msg_speakers task
+extern Task loop_msg_speakers_task;
+void loop_msg_speakers() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", SPEAKERS_TIC);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_speakers_task.restartDelayed(1600 + random(8)*800);
+}
+Task loop_msg_speakers_task(0, TASK_ONCE, &loop_msg_speakers);
 
 //
 void setup_member() {
@@ -330,4 +347,10 @@ void setup_member() {
   //
   runner.addTask(loop_msg_reel_task);
   loop_msg_reel_task.enable();
+  loop_msg_reel_task.restartDelayed(100);
+
+  //
+  runner.addTask(loop_msg_speakers_task);
+  loop_msg_speakers_task.enable();
+  loop_msg_speakers_task.restartDelayed(100);
 }
