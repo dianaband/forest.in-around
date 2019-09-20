@@ -54,7 +54,7 @@ void sound_player_start()
     playSdWav1.play(filename);
   }
   //mark the indicator : HIGH: ON
-  digitalWrite(13, HIGH);
+  // digitalWrite(13, HIGH);
   //to wait a bit for updating isPlaying()
   delay(10);
 }

@@ -69,5 +69,5 @@ void setup_member() {
   runner.addTask(slowturn_task);
   runner.addTask(rest_task);
 
-  fastturn_task.restartDelayed(500);
+  rest_task.restartDelayed(500);
 }

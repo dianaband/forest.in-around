@@ -35,7 +35,7 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PLAYMODE
   if (message == SPEAKERS_PLAYMODE) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
     if (para == SPEAKERS_PLAYMODE_INDEP) {
       playmode = para;
@@ -48,15 +48,18 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PARA_SNDSET
   if (message == SPEAKERS_PARA_SNDSET) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
+    Serial.print("RX : para = ");
+    Serial.println(para);
     if (para >= 1 && para < 100) { // 1 ~ 99
       soundset = para;
+      Serial.println("soundset = para DONE");
     }
   }
   // speakers group : SPEAKERS_PARA_SPEED
   if (message == SPEAKERS_PARA_SPEED) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
     if (para >= 0 && para < 100) { // 0 ~ 99
       vspeed = para;
@@ -97,7 +100,11 @@ Task direc_propa_task(0, TASK_ONCE, &direc_propa);
 // sing!
 void sing() {
   static int song_select = 1;
+  Serial.print("soundset:");
+  Serial.println(soundset);
   song_select = random(soundset, (soundset + 10)); // every sound set has 10 sounds. x ~ x+9
+  Serial.print("song_select:");
+  Serial.println(song_select);
   // "P#SSS@AAAA" - P: P (play), SSS: song #, A: amp. (x 1000)
   // "SXXXXXXXXX" - S: S (stop)
   sprintf(cmdstr, "P#%03d@%04d", song_select, 800); // play song #1, with amplitude

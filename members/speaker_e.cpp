@@ -35,7 +35,7 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PLAYMODE
   if (message == SPEAKERS_PLAYMODE) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
     if (para == SPEAKERS_PLAYMODE_INDEP) {
       playmode = para;
@@ -48,7 +48,7 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PARA_SNDSET
   if (message == SPEAKERS_PARA_SNDSET) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
     if (para >= 1 && para < 100) { // 1 ~ 99
       soundset = para;
@@ -56,7 +56,7 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PARA_SPEED
   if (message == SPEAKERS_PARA_SPEED) {
-    int para = msg.substring(7, 8).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
     // only allow valid inputs
     if (para >= 0 && para < 100) { // 0 ~ 99
       vspeed = para;

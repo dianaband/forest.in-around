@@ -315,6 +315,20 @@ void loop_msg_reel() {
 }
 Task loop_msg_reel_task(0, TASK_ONCE, &loop_msg_reel);
 
+//msg_float task
+extern Task loop_msg_float_task;
+void loop_msg_float() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", FLOAT_FLY);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_float_task.restartDelayed(random(1000*60*2, 1000*60*2.5));
+}
+Task loop_msg_float_task(0, TASK_ONCE, &loop_msg_float);
+
 //msg_speakers task
 extern Task loop_msg_speakers_task;
 void loop_msg_speakers() {
@@ -348,6 +362,11 @@ void setup_member() {
   runner.addTask(loop_msg_reel_task);
   loop_msg_reel_task.enable();
   loop_msg_reel_task.restartDelayed(100);
+
+  //
+  runner.addTask(loop_msg_float_task);
+  loop_msg_float_task.enable();
+  loop_msg_float_task.restartDelayed(10000);
 
   //
   runner.addTask(loop_msg_speakers_task);

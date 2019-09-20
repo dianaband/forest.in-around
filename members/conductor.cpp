@@ -13,6 +13,9 @@ int theme = 0;
 // vspeed
 int vspeed = 0;
 
+// soundset
+int soundset = 0;
+
 //speakers soundset changer
 // // speakers mode changer
 // // //speakers tic task
@@ -40,39 +43,180 @@ void playloop() {
 
   //
   // theme : 0 ~ (N_THEMES - 1)
-  theme++; if (theme > N_THEMES) theme = 0;
+  theme++; if (theme >= N_THEMES) theme = 0;
   //
 
   //
+  Serial.print("THEME => ");
+  Serial.println(theme);
+  //
+
   if (theme == 0) {
+    //
+    // directional propagation + soundset 01~10 + vspeed 20
+    //
+    //
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PLAYMODE, SPEAKERS_PLAYMODE_PROPA);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.println("TX : SPEAKERS_PLAYMODE == SPEAKERS_PLAYMODE_PROPA");
+    //
+    soundset = 1; // soundset ==> 1 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SNDSET, soundset); // soundset ==> give starting sound #..
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SNDSET == ");
+    Serial.println(soundset);
+    Serial.println(msg);
+    //
+    vspeed = 99; // vspeed ==> 0 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SPEED, vspeed);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
+    Serial.println(vspeed);
+    Serial.println(msg);
+    //
+    speaker_a_tick_task.restartDelayed(1000);
+    //
+    // start a vspeed changer..
+    //
+  } else if (theme == 1) {
     //
     // indep_random + soundset 01~10
     //
-
-    //
-    Serial.println("THEME => 0");
     //
     sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PLAYMODE, SPEAKERS_PLAYMODE_INDEP);
     msg = String(msg_cstr);
     mesh.sendBroadcast(msg);
     Serial.println("TX : SPEAKERS_PLAYMODE == SPEAKERS_PLAYMODE_INDEP");
     //
+    soundset = 1; // soundset ==> 1 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SNDSET, soundset); // soundset ==> give starting sound #..
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SNDSET == ");
+    Serial.println(soundset);
+    Serial.println(msg);
+    //
+    vspeed = 99; // vspeed ==> 0 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SPEED, vspeed);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
+    Serial.println(vspeed);
+    Serial.println(msg);
+    //
     speaker_a_tick_task.disable();
     //
     // start a vspeed changer..
     //
-  } else if (theme == 1) {
-    ;
   } else if (theme == 2) {
-    ;
+    //
+    // directional propagation + soundset 01~10 + vspeed 0
+    //
+    //
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PLAYMODE, SPEAKERS_PLAYMODE_PROPA);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.println("TX : SPEAKERS_PLAYMODE == SPEAKERS_PLAYMODE_PROPA");
+    //
+    soundset = 11; // soundset ==> 1 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SNDSET, soundset); // soundset ==> give starting sound #..
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SNDSET == ");
+    Serial.println(soundset);
+    Serial.println(msg);
+    //
+    vspeed = 99; // vspeed ==> 0 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SPEED, vspeed);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
+    Serial.println(vspeed);
+    Serial.println(msg);
+    //
+    speaker_a_tick_task.restartDelayed(1000);
+    //
+    // start a vspeed changer..
+    //
   } else if (theme == 3) {
-    ;
+    //
+    // indep_random + soundset 01~10
+    //
+    //
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PLAYMODE, SPEAKERS_PLAYMODE_INDEP);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.println("TX : SPEAKERS_PLAYMODE == SPEAKERS_PLAYMODE_INDEP");
+    //
+    soundset = 11; // soundset ==> 1 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SNDSET, soundset); // soundset ==> give starting sound #..
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SNDSET == ");
+    Serial.println(soundset);
+    Serial.println(msg);
+    //
+    vspeed = 99; // vspeed ==> 0 ~ 99
+    sprintf(msg_cstr, "[%05d:%02d]", SPEAKERS_PARA_SPEED, vspeed);
+    msg = String(msg_cstr);
+    mesh.sendBroadcast(msg);
+    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
+    Serial.println(vspeed);
+    Serial.println(msg);
+    //
+    speaker_a_tick_task.disable();
+    //
+    // start a vspeed changer..
+    //
   }
 }
-Task playloop_task(1000*6, TASK_FOREVER, &playloop); // every 6 min. play theme changes.
+// Task playloop_task(1000*60*3, TASK_FOREVER, &playloop); // every 6 min. play theme changes.
+Task playloop_task(1000*60*1.5, TASK_FOREVER, &playloop); // every 6 min. play theme changes.
+// Task playloop_task(1000*20, TASK_FOREVER, &playloop); // every 6 min. play theme changes.
+
+//msg_reel task
+extern Task loop_msg_reel_task;
+void loop_msg_reel() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", REEL_TURN);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_reel_task.restartDelayed(random(1000*60*1.5, 1000*60*2));
+}
+Task loop_msg_reel_task(0, TASK_ONCE, &loop_msg_reel);
+
+//msg_float task
+extern Task loop_msg_float_task;
+void loop_msg_float() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", FLOAT_FLY);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_float_task.restartDelayed(random(1000*60*2, 1000*60*2.5));
+}
+Task loop_msg_float_task(0, TASK_ONCE, &loop_msg_float);
 
 //
 void setup_member() {
+
+  //
+  runner.addTask(loop_msg_reel_task);
+  loop_msg_reel_task.enable();
+  loop_msg_reel_task.restartDelayed(100);
+
+  //
+  runner.addTask(loop_msg_float_task);
+  loop_msg_float_task.enable();
+  loop_msg_float_task.restartDelayed(100);
 
   //
   runner.addTask(speaker_a_tick_task);
