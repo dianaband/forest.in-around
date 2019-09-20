@@ -4,7 +4,10 @@
 #define EVERYONE_MOOD_HIGH    (ID_EVERYONE + 1)
 #define EVERYONE_MOOD_LOW     (ID_EVERYONE + 2)
 
-//monitor & conductor
+//conductor
+#define CONDUCTOR_HELLO       (ID_CONDUCTOR + 1)
+
+//monitor
 #define MONITOR_HELLO         (ID_MONITOR + 1)
 #define MONITOR_WAKEUP        (ID_MONITOR + 2)
 #define MONITOR_SLEEP         (ID_MONITOR + 3)
@@ -93,6 +96,9 @@
 #define SPEAKERS_PLAYMODE     (ID_SPEAKERS + 6) // + XX : 0: Individual random, 1: Directional Propagation
 #define SPEAKERS_PARA_SPEED   (ID_SPEAKERS + 7) // + XX : speed of rhythm
 #define SPEAKERS_PARA_SNDSET  (ID_SPEAKERS + 8) // + XX : sound set select
-//status: leading (speakers)
-#define SPEAKERS_LEADING      (ID_SPEAKERS + 80)
-#define SPEAKERS_FOLLOWING    (ID_SPEAKERS + 81)
+
+//common constants for all speakers
+#define SPEAKERS_PLAYMODE_INDEP   (ID_SPEAKERS + 50)
+#define SPEAKERS_PLAYMODE_PROPA   (ID_SPEAKERS + 51)
+// #define SPEAKERS_LEADING       (ID_SPEAKERS + 80)
+// #define SPEAKERS_FOLLOWING     (ID_SPEAKERS + 81)

@@ -26,11 +26,12 @@
 #define ID_SPEAK_F       (11100)
 // (special agent)
 #define ID_MONITOR       (20100)
+#define ID_CONDUCTOR     (20200)
 // (groups)
 #define ID_EVERYONE      (90100)
 #define ID_SPEAKERS      (90200)
 // (choice)
-#define IDENTITY         ID_FLOAT
+#define IDENTITY         ID_CONDUCTOR
 
 #define NUM_OF_MEMBERS 12
 int memberList[NUM_OF_MEMBERS] = {
@@ -73,7 +74,7 @@ extern painlessMesh mesh;
 //by-default : STA_ONLY
 #define NODE_TYPE           NODE_TYPE_STA_ONLY
 //guys w/o speakers : AP_STA
-#if (IDENTITY == ID_GAS || IDENTITY == ID_DRUM || IDENTITY == ID_REEL || IDENTITY == ID_FLOAT || IDENTITY == ID_MONITOR)
+#if (IDENTITY == ID_GAS || IDENTITY == ID_DRUM || IDENTITY == ID_REEL || IDENTITY == ID_FLOAT || IDENTITY == ID_CONDUCTOR || IDENTITY == ID_MONITOR)
 #undef NODE_TYPE
 #define NODE_TYPE           NODE_TYPE_AP_STA
 #endif

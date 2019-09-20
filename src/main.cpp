@@ -12,6 +12,9 @@
 #if (IDENTITY == ID_MONITOR)
 #include "../members/monitor.cpp"
 //
+#elif (IDENTITY == ID_CONDUCTOR)
+#include "../members/conductor.cpp"
+//
 #elif (IDENTITY == ID_GAS)
 #include "../members/gas.cpp"
 //
