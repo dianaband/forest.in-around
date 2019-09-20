@@ -6,3 +6,6 @@ ID_DRUM - ID_FLOAT & ID_REEL
 ID_SPEAK_A ~ ID_SPEAK_F - ID_MONITOR
 
 ID_SPEAK_A -> ID_SPEAK_B -> ID_SPEAK_C -> ID_SPEAK_D -> ID_SPEAK_E -> ID_SPEAK_F -> ID_SPEAK_A (circle)
+ID_SPEAK_A -> ID_SPEAK_B -> ID_SPEAK_C -> ID_SPEAK_D -> ID_SPEAK_E -> ID_SPEAK_F (directional propagation)
+ID_SPEAK_? -> ID_SPEAK_? -> ID_SPEAK_? -> ID_SPEAK_? -> ID_SPEAK_? -> ID_SPEAK_? (multipath propagation)
+ID_SPEAKERS (all in one shot)
