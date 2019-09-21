@@ -2,29 +2,18 @@
 extern Task on_task;
 extern Task off_task;
 
-// // mood
-// int mood = MOOD_SLEEP;
-
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  message = msg.substring(1, 6).toInt();
+  int message = msg.substring(1, 6).toInt();
   // speakers event
   if (message == REEL_TURN) {
     Serial.println("REEL_TURN");
     on_task.restartDelayed(100);
   }
-  // // everyone event
-  // if (message == EVERYONE_MOOD_HIGH) {
-  //   mood = EVERYONE_MOOD_HIGH;
-  // }
-  // if (message == EVERYONE_MOOD_LOW) {
-  //   mood = EVERYONE_MOOD_LOW;
-  // }
 }
 
 // saying hello

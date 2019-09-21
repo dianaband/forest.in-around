@@ -13,7 +13,7 @@
 // member identity
 // objects
 #define ID_GAS           (10100)
-#define ID_TRUNK         (10200)
+#define ID_TRUNK         (10200) // TBD
 #define ID_DRUM          (10300)
 #define ID_REEL          (10400)
 #define ID_FLOAT         (10500)

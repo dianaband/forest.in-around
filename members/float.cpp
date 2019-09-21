@@ -3,17 +3,13 @@ extern Task fastturn_task;
 extern Task slowturn_task;
 extern Task rest_task;
 
-// mood
-int mood = EVERYONE_MOOD_LOW;
-
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  message = msg.substring(1, 6).toInt();
+  int message = msg.substring(1, 6).toInt();
   if (message == FLOAT_FLY) {
     Serial.println("FLOAT_FLY");
     fastturn_task.restartDelayed(100);

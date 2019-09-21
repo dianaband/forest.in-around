@@ -1,6 +1,3 @@
-// mood
-int mood = EVERYONE_MOOD_LOW;
-
 // names for all the members
 String names[NUM_OF_MEMBERS] = {
   "Gas",
@@ -24,13 +21,12 @@ int presence[NUM_OF_MEMBERS];
 int awakeness[NUM_OF_MEMBERS]; // 1 : awake, 0 : sleeping, -1 : unknown
 
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  message = msg.substring(1, 6).toInt();
+  int message = msg.substring(1, 6).toInt();
   switch (message)
   {
   // we are interested in all those 'hello' messages.

@@ -17,13 +17,12 @@ int playmode = SPEAKERS_PLAYMODE_INDEP;
 int vspeed = 0;
 
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  message = msg.substring(1, 6).toInt();
+  int message = msg.substring(1, 6).toInt();
   // this speaker event
   if (playmode == SPEAKERS_PLAYMODE_PROPA) {
     if (message == SPEAK_D_TIC) {
