@@ -23,7 +23,7 @@
 
 #define DRUM_HELLO            (ID_DRUM + 1)
 #define DRUM_SLEEPING         (ID_DRUM + 2)
-#define DRUM_TOMTOM           (ID_DRUM + 3)
+#define DRUM_SCRATCH          (ID_DRUM + 3)
 
 #define FLOAT_HELLO           (ID_FLOAT + 1)
 #define FLOAT_SLEEPING        (ID_FLOAT + 2)

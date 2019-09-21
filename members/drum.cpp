@@ -5,7 +5,7 @@ static Servo myservo;
 extern Task servo_release_task;
 
 // my tasks
-extern Task ringring_task;
+extern Task scratch_task;
 extern Task saying_greeting;
 
 // room protocol
@@ -15,26 +15,26 @@ void gotChangedConnectionCallback() { // REQUIRED
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
   int message = msg.substring(1, 6).toInt();
-  if (message == GAS_RING_RING_RING) {
-    Serial.println("GAS_RING_RING_RING");
-    ringring_task.restartDelayed(100);
+  if (message == DRUM_SCRATCH) {
+    Serial.println("DRUM_SCRATCH");
+    scratch_task.restartDelayed(100);
   }
 }
 
 // saying hello
 void greeting() {
   static String msg = "";
-  sprintf(msg_cstr, "[%05d]", GAS_HELLO);
+  sprintf(msg_cstr, "[%05d]", DRUM_HELLO);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
 }
 Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
-// ringring.
-void ringring() {
+// scratch.
+void scratch() {
   int angle = random(80, 125);
   //
-  Serial.print("ringring go -> ");
+  Serial.print("scratch go -> ");
   Serial.print(angle);
   Serial.println(" deg.");
   //
@@ -42,7 +42,7 @@ void ringring() {
   myservo.write(angle);
   servo_release_task.restartDelayed(100);
 }
-Task ringring_task(0, TASK_ONCE, &ringring);
+Task scratch_task(0, TASK_ONCE, &scratch);
 
 // servo release
 void servo_release() {
@@ -64,5 +64,5 @@ void setup_member() {
   runner.addTask(servo_release_task);
 
   //
-  runner.addTask(ringring_task);
+  runner.addTask(scratch_task);
 }

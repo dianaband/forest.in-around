@@ -1,5 +1,4 @@
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
 void gotChangedConnectionCallback() { // REQUIRED
 }
@@ -205,6 +204,34 @@ void loop_msg_float() {
 }
 Task loop_msg_float_task(0, TASK_ONCE, &loop_msg_float);
 
+//msg_gas task
+extern Task loop_msg_gas_task;
+void loop_msg_gas() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", GAS_RING_RING_RING);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_gas_task.restartDelayed(random(800, 3000));
+}
+Task loop_msg_gas_task(0, TASK_ONCE, &loop_msg_gas);
+
+//msg_drum task
+extern Task loop_msg_drum_task;
+void loop_msg_drum() {
+  //
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", DRUM_SCRATCH);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
+  //
+  loop_msg_drum_task.restartDelayed(random(800, 3000));
+}
+Task loop_msg_drum_task(0, TASK_ONCE, &loop_msg_drum);
+
 //
 void setup_member() {
 
@@ -217,6 +244,16 @@ void setup_member() {
   runner.addTask(loop_msg_float_task);
   loop_msg_float_task.enable();
   loop_msg_float_task.restartDelayed(100);
+
+  //
+  runner.addTask(loop_msg_gas_task);
+  loop_msg_gas_task.enable();
+  loop_msg_gas_task.restartDelayed(100);
+
+  //
+  runner.addTask(loop_msg_drum_task);
+  loop_msg_drum_task.enable();
+  loop_msg_drum_task.restartDelayed(100);
 
   //
   runner.addTask(speaker_a_tick_task);
