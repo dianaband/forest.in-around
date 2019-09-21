@@ -98,12 +98,10 @@ Task direc_propa_task(0, TASK_ONCE, &direc_propa);
 
 // sing!
 void sing() {
+  //
   static int song_select = 1;
-  Serial.print("soundset:");
-  Serial.println(soundset);
+  //
   song_select = random(soundset, (soundset + 10)); // every sound set has 10 sounds. x ~ x+9
-  Serial.print("song_select:");
-  Serial.println(song_select);
   // "P#SSS@AAAA" - P: P (play), SSS: song #, A: amp. (x 1000)
   // "SXXXXXXXXX" - S: S (stop)
   sprintf(cmdstr, "P#%03d@%04d", song_select, 800); // play song #1, with amplitude
