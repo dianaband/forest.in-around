@@ -32,7 +32,7 @@ Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
 // scratch.
 void scratch() {
-  int angle = random(80, 125);
+  int angle = random(60, 140);
   //
   Serial.print("scratch go -> ");
   Serial.print(angle);
