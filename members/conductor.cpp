@@ -202,7 +202,7 @@ void playloop() {
     Serial.println(soundset);
     Serial.println(msg);
     //
-    vspeed = 99; // vspeed ==> 0 ~ 999
+    vspeed = 999; // vspeed ==> 0 ~ 999
     sprintf(msg_cstr, "[%05d:%03d]", SPEAKERS_PARA_SPEED, vspeed);
     msg = String(msg_cstr);
     mesh.sendBroadcast(msg);
@@ -228,7 +228,7 @@ void playloop() {
     Serial.println(soundset);
     Serial.println(msg);
     //
-    vspeed = 99; // vspeed ==> 0 ~ 999
+    vspeed = 999; // vspeed ==> 0 ~ 999
     sprintf(msg_cstr, "[%05d:%03d]", SPEAKERS_PARA_SPEED, vspeed);
     msg = String(msg_cstr);
     mesh.sendBroadcast(msg);

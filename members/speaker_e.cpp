@@ -55,9 +55,9 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   }
   // speakers group : SPEAKERS_PARA_SPEED
   if (message == SPEAKERS_PARA_SPEED) {
-    int para = msg.substring(7, 9).toInt(); // get +XX parameter..
+    int para = msg.substring(7, 10).toInt(); // get +XXX parameter..
     // only allow valid inputs
-    if (para >= 0 && para < 100) { // 0 ~ 99
+    if (para >= 0 && para < 1000) { // 0 ~ 999
       vspeed = para;
     }
   }
