@@ -30,7 +30,8 @@ void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
     }
   }
   // if there's NO SPEAK_X_HELLO for 1 min. turn off objects.
-  if (millis() - timestamp > 1000*60*1) {
+  if (millis() - timestamp > 1000*20) {
+    town_onoff = false;
     loop_msg_reel_task.disable();
     loop_msg_float_task.disable();
     loop_msg_gas_task.disable();
@@ -93,7 +94,7 @@ void loop_msg_drum() {
 Task loop_msg_drum_task(0, TASK_ONCE, &loop_msg_drum);
 
 // sound theme
-#define N_THEMES 16
+#define N_THEMES 14
 int theme = 0;
 
 // vspeed
@@ -194,7 +195,7 @@ void playloop() {
     Serial.println(vspeed);
     Serial.println(msg);
     //
-    playloop_task.restartDelayed(20000);
+    playloop_task.restartDelayed(30000);
     //
   } else if (theme == 4) {
     //
@@ -226,7 +227,7 @@ void playloop() {
     Serial.println(vspeed);
     Serial.println(msg);
     //
-    playloop_task.restartDelayed(20000);
+    playloop_task.restartDelayed(30000);
     //
   } else if (theme == 6) {
     //
@@ -250,7 +251,7 @@ void playloop() {
     Serial.println(vspeed);
     Serial.println(msg);
     //
-    playloop_task.restartDelayed(30000);
+    playloop_task.restartDelayed(40000);
     //
   } else if (theme == 8) {
     //
@@ -347,30 +348,6 @@ void playloop() {
     Serial.println(msg);
     //
     playloop_task.restartDelayed(20000);
-    //
-  } else if (theme == 14) {
-    //
-    vspeed = 50; // vspeed ==> 0 ~ 999
-    sprintf(msg_cstr, "[%05d:%03d]", SPEAKERS_PARA_SPEED, vspeed);
-    msg = String(msg_cstr);
-    mesh.sendBroadcast(msg);
-    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
-    Serial.println(vspeed);
-    Serial.println(msg);
-    //
-    playloop_task.restartDelayed(40000);
-    //
-  } else if (theme == 15) {
-    //
-    vspeed = 0; // vspeed ==> 0 ~ 999
-    sprintf(msg_cstr, "[%05d:%03d]", SPEAKERS_PARA_SPEED, vspeed);
-    msg = String(msg_cstr);
-    mesh.sendBroadcast(msg);
-    Serial.print("TX : SPEAKERS_PARA_SPEED == ");
-    Serial.println(vspeed);
-    Serial.println(msg);
-    //
-    playloop_task.restartDelayed(30000);
     //
   }
 
