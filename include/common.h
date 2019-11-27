@@ -10,13 +10,24 @@
 // id ==> 900~ : groups
 // words ==> 1 ~ 99 ==> see 'words.h' for the details
 
+
+///// I want to identify all unique modules with their 'already-given' unique numbers.. not by the numbers that I have given...
+// for ex., mac addr. chip. id.. etc. and then i want to use following ids.. as.. a 'categories' not ids... categories == classes.. types..
+// then all the net. will become more organic. flexible. no?
+
+/////// for painlessmesh.. 'nodeid' is present. let's use these..
+
+/// and also think about 'json messages' which will help a lot more...
+
+
+
 // member identity
 // objects
 #define ID_GAS           (10100)
 #define ID_TRUNK         (10200) // TBD
-#define ID_DRUM          (10300)
-#define ID_REEL          (10400)
-#define ID_FLOAT         (10500)
+#define ID_DRUM          (10300) // TBD
+#define ID_REEL          (10400) // TBD
+#define ID_FLOAT         (10500) // TBD
 // speakers
 #define ID_SPEAK_A       (10600)
 #define ID_SPEAK_B       (10700)

@@ -210,6 +210,36 @@ void setup() {
 #endif
 #endif
 
+  //understanding what is 'the nodeId' ==> last 4 bytes of 'softAPmacAddress'
+  // uint32_t nodeId = tcp::encodeNodeId(MAC);
+  Serial.print("nodeId (dec) : ");
+  Serial.println(mesh.getNodeId(), DEC);
+  Serial.print("nodeId (hex) : ");
+  Serial.println(mesh.getNodeId(), HEX);
+  uint8_t MAC[] = {0, 0, 0, 0, 0, 0};
+  if (WiFi.softAPmacAddress(MAC) == 0) {
+    Serial.println("init(): WiFi.softAPmacAddress(MAC) failed.");
+  }
+  Serial.print("MAC : ");
+  Serial.print(MAC[0], HEX); Serial.print(", ");
+  Serial.print(MAC[1], HEX); Serial.print(", ");
+  Serial.print(MAC[2], HEX); Serial.print(", ");
+  Serial.print(MAC[3], HEX); Serial.print(", ");
+  Serial.print(MAC[4], HEX); Serial.print(", ");
+  Serial.println(MAC[5], HEX);
+
+  // for instance,
+
+  // a huzzah board
+  // nodeId (dec) : 3256120530
+  // nodeId (hex) : C21474D2
+  // MAC : BE, DD, C2, 14, 74, D2
+
+  // a esp8266 board (node mcu)
+  // nodeId (dec) : 758581767
+  // nodeId (hex) : 2D370A07
+  // MAC : B6, E6, 2D, 37, A, 7
+
   //setup_member
   setup_member();
 }
