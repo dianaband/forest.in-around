@@ -16,6 +16,13 @@
 // then all the net. will become more organic. flexible. no?
 
 /////// for painlessmesh.. 'nodeid' is present. let's use these..
+/// ok. now i know what it is.. and that is always available when we have painlessmesh instances.. which is cool.
+/// then, what is the point now..?
+/// so , i want to make this network 'scalable' .. add more of 'these' and then it scales up.
+/// cause now i want to add more speakers.. after F.. GHIJK... i dont' know how many i want more.. but just some flexible amount
+/// if i add.. then it must be registered automatically. and works immediately... as a participant of the net.
+/// once i change one of it.. or remove it.. also works without extra work.
+///
 
 /// and also think about 'json messages' which will help a lot more...
 
