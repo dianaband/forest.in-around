@@ -12,41 +12,8 @@
 #if (IDENTITY == ID_MONITOR)
 #include "../members/monitor.cpp"
 //
-#elif (IDENTITY == ID_CONDUCTOR)
-#include "../members/conductor.cpp"
-//
-#elif (IDENTITY == ID_GAS)
-#include "../members/gas.cpp"
-//
-#elif (IDENTITY == ID_TRUNK)
-#include "../members/trunk.cpp"
-//
-#elif (IDENTITY == ID_DRUM)
-#include "../members/drum.cpp"
-//
 #elif (IDENTITY == ID_FLOAT)
 #include "../members/float.cpp"
-//
-#elif (IDENTITY == ID_REEL)
-#include "../members/reel.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_A)
-#include "../members/speaker_a.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_B)
-#include "../members/speaker_b.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_C)
-#include "../members/speaker_c.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_D)
-#include "../members/speaker_d.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_E)
-#include "../members/speaker_e.cpp"
-//
-#elif (IDENTITY == ID_SPEAK_F)
-#include "../members/speaker_f.cpp"
 //
 #endif
 
