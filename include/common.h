@@ -2,24 +2,24 @@
 
 // member identity
 // objects
-#define ID_FLOAT         (10100) // TBD
-#define ID_ARROW         (10200) // TBD
-#define ID_GLASS         (10300) // TBD
-#define ID_BELL          (10400) // TBD
+#define ID_FLOAT         (10100)
+#define ID_GLASS         (10200)
+#define ID_ARROW         (10300)
+#define ID_BELL          (10400)
 // (special agent)
-#define ID_MONITOR       (20100)
-#define ID_CONDUCTOR     (20200)
+#define ID_MONITOR       (20100) // TBD
+#define ID_CONDUCTOR     (20200) // TBD
 // (groups)
 #define ID_EVERYONE      (90100)
-#define ID_SPEAKERS      (90200)
+#define ID_SPEAKERS      (90200) // TBD
 // (choice)
 #define IDENTITY         ID_FLOAT
 
 #define NUM_OF_MEMBERS 5
 int memberList[NUM_OF_MEMBERS] = {
   ID_FLOAT, // 1
-  ID_ARROW, // 2
-  ID_GLASS, // 3
+  ID_GLASS, // 2
+  ID_ARROW, // 3
   ID_BELL, // 4
   ID_MONITOR // 5
 };
@@ -38,7 +38,7 @@ extern painlessMesh mesh;
 #define FIRMATA_ON          (0xF13A0001)
 #define FIRMATA_OFF         (0xF13A0002)
 #define FIRMATA_USE         FIRMATA_OFF
-#if (IDENTITY == ID_KEYBED)
+#if (IDENTITY == ID_NOBODY)
 #undef FIRMATA_USE
 #define FIRMATA_USE         FIRMATA_ON
 #endif
@@ -47,11 +47,11 @@ extern painlessMesh mesh;
 #define NODE_TYPE_AP_STA    (0x40DE0001)
 #define NODE_TYPE_STA_ONLY  (0x40DE0002)
 //by-default : STA_ONLY
-#define NODE_TYPE           NODE_TYPE_STA_ONLY
-//guys w/o speakers : AP_STA
-#if (IDENTITY == ID_GAS || IDENTITY == ID_DRUM || IDENTITY == ID_REEL || IDENTITY == ID_FLOAT || IDENTITY == ID_CONDUCTOR || IDENTITY == ID_MONITOR)
-#undef NODE_TYPE
 #define NODE_TYPE           NODE_TYPE_AP_STA
+//guys w/ speakers : AP_STA
+#if (IDENTITY == ID_NOBODY)
+#undef NODE_TYPE
+#define NODE_TYPE           NODE_TYPE_STA_ONLY
 #endif
 
 // board

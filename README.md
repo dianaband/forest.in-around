@@ -11,6 +11,6 @@
 ## members
 
 - 1 float
-- 1 arrow
 - 1 glass
-- 1 bell
+- (optional) 1 arrow
+- (optional) 1 bell

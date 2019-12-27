@@ -1,8 +1,8 @@
 //
-// Exhibition @ exhibition-space
-//   <one and twelve one-hundred-eighth seconds at the prince's room>
+// Hint Exhibition @ Post Territory Ujeongguk
+//   <forest.in-around (unofficial)>
 //
-// Feb. 11 @ 2019
+// Dec. 27 @ 2019
 //
 
 // the common sense
@@ -10,10 +10,19 @@
 
 // the members lounge
 #if (IDENTITY == ID_MONITOR)
-#include "../members/monitor.cpp"
+#include "../members/monitor.cpp" // TBD
 //
 #elif (IDENTITY == ID_FLOAT)
 #include "../members/float.cpp"
+//
+#elif (IDENTITY == ID_GLASS)
+#include "../members/glass.cpp"
+//
+#elif (IDENTITY == ID_ARROW)
+#include "../members/arrow.cpp"
+//
+#elif (IDENTITY == ID_BELL)
+#include "../members/bell.cpp"
 //
 #endif
 
