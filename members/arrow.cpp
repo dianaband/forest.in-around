@@ -5,124 +5,54 @@ extern Task rest_task;
 //global
 int speed = 300;
 
-// mood
-int mood = MOOD_SLEEP;
-
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
-extern Task reaction_task;
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // am i awake?
-  if (mood == MOOD_SLEEP) {
-    // i am sleeping so, only 'wake-up!' message is meaningful to me.
-    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
-      mood = MOOD_HIGH;
-      turn_task.restartDelayed(100);
-    }
-  } else {
-    // is it for me?
-    int receipent = msg.substring(1, 7).toInt();
-    if (receipent == IDENTITY) {
-      // what it says?
-      message = msg.substring(8, 12).toInt();
-      // i ve heard. reaction.
-      if (reaction_task.getRunCounter() == 0)
-        reaction_task.restart();
-      // so, what to do, then?
-      switch (message)
-      {
-      case ARROW_WORD_CHANGE:
-        Serial.println("arrow: speed change! ");
-        //turn_task.restartDelayed(100);
-        speed = random(20, 300);
-        break;
-      default:
-        ;
-      }
-    }
-    //
-    if (receipent == ID_EVERYONE) {
-      // what it says?
-      message = msg.substring(8, 12).toInt();
-      // so, what to do, then?
-      switch (message)
-      {
-      case KEYBED_WORD_FREE:
-        mood = MOOD_HIGH;
-        break;
-      case KEYBED_WORD_ACTIVE:
-        mood = MOOD_LOW;
-        break;
-      case MONITOR_WORD_SLEEP:
-        mood = MOOD_SLEEP;
-        turn_task.disable();
-        rest_task.restartDelayed(1000); // stop after 1 sec.
-        break;
-      default:
-        ;
-      }
-    }
+  int message = msg.substring(1, 6).toInt();
+  if (message == ARROW_CHANGE) {
+    Serial.println("arrow: speed change! ");
+    //turn_task.restartDelayed(100);
+    speed = random(20, 300);
   }
 }
-
-// some reaction for received msg.
-void reaction() {
-  static int mask = 0x8000;
-  static int count = 0;
-  if (reaction_task.isFirstIteration()) {
-    mask = 0x8000;
-    count = 0;
-  }
-  if ((message & mask) == 0) {
-    ; // what to do?
-  }
-  else {
-    ; // what to do?
-  }
-  if (reaction_task.isLastIteration()) {
-    //
-  }
-  mask = mask >> 1;
-  count++;
-}
-Task reaction_task(10, 17, &reaction);
 
 // saying hello
 void greeting() {
   static String msg = "";
-  if (mood == MOOD_SLEEP) {
-    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], ARROW_WORD_SLEEPING); //"zzzzzzzz"
-  } else {
-    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], ARROW_WORD_HELLO); //"which direction is you?"
-  }
+  sprintf(msg_cstr, "[%05d]", ARROW_HELLO);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
 }
 Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
-// routine
-extern Task routine_task;
-void routine() {
+// glass_msg
+extern Task glass_msg_task;
+void glass_msg() {
   static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d]", ID_GLASS, GLASS_WORD_PLAYTIME);
+  sprintf(msg_cstr, "[%05d]", GLASS_PLAYTIME);
   msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
   //
-  if (mood == MOOD_HIGH) {
-    mesh.sendBroadcast(msg);
-    routine_task.restartDelayed(random(1000*60*3, 1000*60*5));
-  } else if (mood == MOOD_LOW) {
-    mesh.sendBroadcast(msg);
-    routine_task.restartDelayed(1000*60*5);
-  } else if (mood == MOOD_SLEEP) {
-    // do nothing
-    routine_task.restartDelayed(1000*60*1);
-  }
+  glass_msg_task.restartDelayed(random(1000*60*1, 1000*60*2)); // TEST
+  // glass_msg_task.restartDelayed(random(1000*60*3, 1000*60*5));
 }
-Task routine_task(0, TASK_ONCE, &routine);
+Task glass_msg_task(0, TASK_ONCE, &glass_msg);
+
+// bell_msg
+extern Task bell_msg_task;
+void bell_msg() {
+  static String msg = "";
+  sprintf(msg_cstr, "[%05d]", BELL_RING_RING_RING);
+  msg = String(msg_cstr);
+  mesh.sendBroadcast(msg);
+  //
+  bell_msg_task.restartDelayed(random(1000*60*3, 1000*60*5));
+}
+Task bell_msg_task(0, TASK_ONCE, &bell_msg);
 
 // play sequences
 // note_1
@@ -130,11 +60,7 @@ void turn() {
   analogWrite(D6,speed);
   Serial.print("arrow_speed:");
   Serial.println(speed);
-  if (mood == MOOD_SLEEP) {
-    rest_task.restartDelayed(1000); // stop after 1 sec.
-  } else {
-    turn_task.restartDelayed(1000); // speed updates every 1 sec.
-  }
+  turn_task.restartDelayed(1000); // speed updates every 1 sec.
 }
 Task turn_task(0, TASK_ONCE, &turn);
 // fin
@@ -153,12 +79,14 @@ void setup_member() {
 
   runner.addTask(saying_greeting);
   saying_greeting.enable();
-  runner.addTask(routine_task);
-  routine_task.enable();
+  runner.addTask(glass_msg_task);
+  glass_msg_task.enable();
+  runner.addTask(bell_msg_task);
+  bell_msg_task.enable();
 
   runner.addTask(turn_task);
-  runner.addTask(reaction_task);
   runner.addTask(rest_task);
 
-  rest_task.restartDelayed(100); // for TEST
+  //
+  turn_task.restartDelayed(100);
 }

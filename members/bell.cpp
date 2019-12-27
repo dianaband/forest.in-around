@@ -2,7 +2,8 @@
 #define SERVO_PIN D6
 #include <Servo.h>
 static Servo myservo;
-#define HITTING_ANGLE 87
+// #define HITTING_ANGLE 87 // mild hit. + fails sometimes..
+#define HITTING_ANGLE 89
 #define RELEASE_ANGLE 60
 #define STABILIZE_ANGLE 53
 
@@ -19,116 +20,40 @@ int control_count = 0;
 //
 extern Task servo_release_task;
 
-// mood
-int mood = MOOD_SLEEP;
-
 // room protocol
-static int message = 0;
 static char msg_cstr[MSG_LENGTH_MAX] = {0, };
-extern Task reaction_task;
 void gotChangedConnectionCallback() { // REQUIRED
 }
 void gotMessageCallback(uint32_t from, String & msg) { // REQUIRED
   Serial.println(msg);
-  // am i awake?
-  if (mood == MOOD_SLEEP) {
-    // i am sleeping so, only 'wake-up!' message is meaningful to me.
-    if (msg.substring(8, 12).toInt() == MONITOR_WORD_WAKEUP) {
-      mood = MOOD_HIGH;
-    }
-  } else {
-    // is it for me?
-    int receipent = msg.substring(1, 7).toInt();
-    if (receipent == IDENTITY) {
-      message = msg.substring(8, 12).toInt();
-      if (reaction_task.getRunCounter() == 0)
-        reaction_task.restart();
-      switch (message) {
-      case BELL_WORD_RING_RING_RING:
-        Serial.println("bell: ring ring.");
-        hit_task.restartDelayed(100);
-        break;
-      default:
-        ;
-      }
-    }
-    //
-    if (receipent == ID_EVERYONE) {
-      // what it says?
-      message = msg.substring(8, 12).toInt();
-      // so, what to do, then?
-      switch (message)
-      {
-      case KEYBED_WORD_FREE:
-        if (mood != MOOD_SLEEP) mood = MOOD_HIGH;
-        break;
-      case KEYBED_WORD_ACTIVE:
-        if (mood != MOOD_SLEEP) mood = MOOD_LOW;
-        break;
-      case MONITOR_WORD_SLEEP:
-        mood = MOOD_SLEEP;
-        break;
-      default:
-        ;
-      }
-    }
+  int message = msg.substring(1, 6).toInt();
+  if (message == BELL_RING_RING_RING) {
+    Serial.println("bell: ring ring.");
+    hit_task.restartDelayed(100);
   }
 }
-
-// some reaction for received msg.
-void reaction() {
-  static int mask = 0x8000;
-  static int count = 0;
-  if (reaction_task.isFirstIteration()) {
-    mask = 0x8000;
-    count = 0;
-  }
-  if ((message & mask) == 0) {
-    ; // what to do?
-  }
-  else {
-    ; // what to do?
-  }
-  if (reaction_task.isLastIteration()) {
-    //
-  }
-  mask = mask >> 1;
-  count++;
-}
-Task reaction_task(10, 17, &reaction);
 
 // saying hello
 void greeting() {
   static String msg = "";
-  if (mood == MOOD_SLEEP) {
-    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], BELL_WORD_SLEEPING); //"zzzzzzzz"
-  } else {
-    sprintf(msg_cstr, "[%06d:%03d]", memberList[random(NUM_OF_MEMBERS)], BELL_WORD_HELLO); //"signal out~ take my signal~~ to every~~"
-  }
+  sprintf(msg_cstr, "[%05d]", BELL_HELLO);
   msg = String(msg_cstr);
   mesh.sendBroadcast(msg);
+  Serial.println("TX : " + msg);
 }
 Task saying_greeting(10000, TASK_FOREVER, &greeting);
 
-// routine
-extern Task routine_task;
-void routine() {
-  static String msg = "";
-  sprintf(msg_cstr, "[%06d:%03d] To look: look around now!", ID_LOOK, LOOK_WORD_LOOK_AROUND);
-  msg = String(msg_cstr);
-  //
-  if (mood == MOOD_HIGH) {
-    mesh.sendBroadcast(msg);
-    routine_task.restartDelayed(random(1500, 5000));
-  } else if (mood == MOOD_LOW) {
-    mesh.sendBroadcast(msg);
-    routine_task.restartDelayed(random(5000, 20000));
-  } else if (mood == MOOD_SLEEP) {
-    //do nothing
-    routine_task.restartDelayed(1000*60*1);
-  }
-}
-Task routine_task(0, TASK_ONCE, &routine);
+// // p2p_msg -> ARROW_CHANGE
+// extern Task p2p_msg_task;
+// void p2p_msg() {
+//   static String msg = "";
+//   sprintf(msg_cstr, "[%05d]", ARROW_CHANGE);
+//   msg = String(msg_cstr);
+//   mesh.sendBroadcast(msg);
+//   //
+//   p2p_msg_task.restartDelayed(random(1000*20, 1000*60));
+// }
+// Task p2p_msg_task(0, TASK_ONCE, &p2p_msg);
 
 // hit!
 void hit() {
@@ -166,7 +91,7 @@ void hit() {
     pcontrol_new = true;
     pcontrol_start = RELEASE_ANGLE;
     pcontrol_target = STABILIZE_ANGLE;
-    pcontrol_task.restartDelayed(80);
+    pcontrol_task.restartDelayed(280);
     //
     control_count = 0;
   }
@@ -227,20 +152,19 @@ Task servo_release_task(0, TASK_ONCE, &servo_release);
 
 //
 void setup_member() {
-  //servo
-  // myservo.attach(D6);
+  //random seed
+  randomSeed(analogRead(0));
 
   //
   runner.addTask(saying_greeting);
   saying_greeting.enable();
-  runner.addTask(routine_task);
-  routine_task.restart();
+  // runner.addTask(p2p_msg_task);
+  // p2p_msg_task.enable();
 
-  runner.addTask(reaction_task);
   runner.addTask(hit_task);
   runner.addTask(pcontrol_task);
-
   runner.addTask(servo_release_task);
 
-  // hit_task.restart();
+  //
+  pcontrol_task.restart();
 }

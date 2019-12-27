@@ -10,7 +10,7 @@
 
 ## members
 
-- 1 float
+- 1 float (==> adafruit HUZZAH)
 - 1 glass
 - (optional) 1 arrow
 - (optional) 1 bell

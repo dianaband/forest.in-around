@@ -13,7 +13,7 @@
 #define ID_EVERYONE      (90100)
 #define ID_SPEAKERS      (90200) // TBD
 // (choice)
-#define IDENTITY         ID_FLOAT
+#define IDENTITY         ID_GLASS
 
 #define NUM_OF_MEMBERS 5
 int memberList[NUM_OF_MEMBERS] = {

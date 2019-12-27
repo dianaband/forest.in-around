@@ -1,7 +1,11 @@
 - (relationship)
 
-ID_FLOAT - ID_GLASS
+ID_FLOAT <<-- ID_GLASS <--> ID_ARROW -->> ID_BELL
 
-ID_ARROW ??
+'float' & 'bell' is located high place. hard to reach.
+so i want them to be passive. doesn't speak but only-listening.
 
-ID_BELL ??
+'glass' & 'arrow' are a pair. and plus. they also speak to the high guys.
+
+'glass' also speak to 'float'
+'arrow' also speak to 'bell'
